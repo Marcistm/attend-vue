@@ -42,7 +42,7 @@ export default {
   position: absolute;
   height: 100%;
   width: 100%;
-  background: url("../assets/background.png");
+  background: url("../../public/background.png");
   background-size: 100% 100%;
   text-align: center;
 
