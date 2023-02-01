@@ -15,7 +15,12 @@ const routes = [
     path: '/home',
     name: 'home',
     component: () => import('../views/Home.vue')
-  }
+  },
+  {
+    path: '/resetPass',
+    component: () => import('../views/resetPass.vue'),
+    hidden: true //导航菜单忽略选项
+  },
 ]
 
 const router = new VueRouter({

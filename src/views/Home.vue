@@ -30,11 +30,11 @@ export default {
   },methods:{
     change(name){
      this.name=name
-
     }
   },
   mounted() {
-    this.table=this.$store.state.filter({role:0},this.$store.state.table)[0].item
+    let role=localStorage.getItem('permission')
+    this.table=this.$store.state.filter({role:role},this.$store.state.table)[0].item
   }
 }
 
