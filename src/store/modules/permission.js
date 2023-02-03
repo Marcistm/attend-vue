@@ -29,11 +29,11 @@ function hasPermission (roles,route){
 */
 export function filterAsyncRoutes(routes,roles){
     const res = []
-   
+
     routes.forEach(route => {
         // 复制一份
         const tmp = { ...route}
-       
+
         // 如果用户有访问权限则加入结果路由表
         if(hasPermission(roles,tmp)){
             // 如果存在子路由则递归过滤之
@@ -43,7 +43,7 @@ export function filterAsyncRoutes(routes,roles){
             res.push(tmp)
         }
     })
-    
+
     return res;
 }
 
@@ -75,6 +75,8 @@ const actions = {
                 // console.log(roles)
                 //  否则需要根据用户角色做过滤处理 jerry
                 accessedRoutes = filterAsyncRoutes(asyncRoutes,roles)
+
+
             }
           
             commit('SET_ROUTES',accessedRoutes)

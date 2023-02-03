@@ -68,8 +68,7 @@ export default {
       });
     },
     login(){
-      // let path = 'http://127.0.0.1:5000/login'
-      let path = 'http://127.0.0.1:5000/login'
+      let path = 'http://43.143.116.236:5001/login'
       let param = {
         username: this.loginForm.username,
         password: this.loginForm.password
@@ -78,7 +77,7 @@ export default {
         if (responses.data.code === 200) {
           if (responses.data.privilege === '0') {
             this.loading = false
-            this.$message.error('没有登录系统的权限，请向OA申请')
+            this.$message.error('没有登录系统的权限')
           } else {
             localStorage.setItem('permission', responses.data.privilege)
             setUser(this.loginForm.username)

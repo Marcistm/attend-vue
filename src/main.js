@@ -9,9 +9,12 @@ import ElementUI from 'element-ui';
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(Vuex)
-import './router/permission'
-new Vue({
 
+import 'nprogress/nprogress.css'
+import './router/permission'
+import service from "@/http";
+new Vue({
+  service,
   router,
   store,
   render: h => h(App)

@@ -77,7 +77,7 @@ export default {
             });
         },
         login(){
-          let path = 'http://127.0.0.1:5000/change_pswd'
+          let path = 'http://43.143.116.236:5001/change_pswd'
           let value = {
             'username': getUser(),
             'password': this.loginForm.password

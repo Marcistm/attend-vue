@@ -39,7 +39,7 @@ export default {
   mounted() {
     let t=this.$store.state.filter({name:this.name},this.$store.state.tableData)
     this.columns=t[0].column
-    let path='http://127.0.0.1:5000/get/data'
+    let path='http://43.143.116.236:5001/get/data'
     let sql='select a.'
     sql=sql+t[0].column.map(function (t){return t.name;}).join(',a.');
     sql=sql+' from '+t[0].table+' a'

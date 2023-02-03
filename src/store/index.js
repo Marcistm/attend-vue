@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import user from "@/store/modules/user";
+import permission from "@/store/modules/permission";
 
 Vue.use(Vuex)
 
@@ -40,9 +41,11 @@ const store = new Vuex.Store({
         // modules,
     modules: {
         user,
+        permission
     },
     getters:{
         roles: state => state.user.roles,
+        token: state => state.user.token,
     }
 })
 

@@ -3,8 +3,14 @@ import VueRouter from 'vue-router'
 
 
 Vue.use(VueRouter)
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location, resolve, reject) {
+  if ( resolve || reject ) return originalPush.call(this, location, resolve, reject)
+  return originalPush.call(this, location).catch((e)=>{})
+}
 
-const routes = [
+export const asyncRoutes = []
+export const constRouter = [
 
   {
     path: '/',
@@ -26,7 +32,7 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes:constRouter
 })
 
 export default router

@@ -28,7 +28,6 @@ service.interceptors.response.use(
     // 通过自定义code 判定响应状态 也可以通过HTTP状态码判断
     response =>{
         const res = response.data
-
         // code 不为0 则判断为一个错误
         if(res.code !== 0){
             Message({
