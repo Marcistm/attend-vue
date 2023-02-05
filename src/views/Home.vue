@@ -11,17 +11,20 @@
       <el-main>
         <Board v-if="name==='首页'||name===''"></Board>
         <DataTable v-if="['请假'].includes(name)" :name="name"></DataTable>
+        <UserManage v-if="name==='用户管理'" :name="name"></UserManage>
       </el-main>
+
   </el-container>
 </template>
 
 <script>
 import DataTable from "@/components/DataTable";
 import Board from "@/components/Board";
+import UserManage from "@/components/UserManage";
 
 export default {
   name: "Home",
-  components: {Board, DataTable},
+  components: {UserManage, Board, DataTable},
   data(){
     return{
       table:[],

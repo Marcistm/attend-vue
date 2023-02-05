@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import AskForLeave from "@/components/AskForLeave";
 
 export default {
@@ -37,15 +36,9 @@ export default {
     name:String
   },
   mounted() {
-    let t=this.$store.state.filter({name:this.name},this.$store.state.tableData)
-    this.columns=t[0].column
-    let path='http://43.143.116.236:5001/get/data'
-    let sql='select a.'
-    sql=sql+t[0].column.map(function (t){return t.name;}).join(',a.');
-    sql=sql+' from '+t[0].table+' a'
-    axios.get(path,{params:{sql:sql}}).then(res=>{
-      console.log(res)
-    })
+
+    let name=this.name
+    this.$store.dispatch('getData',{name})
   }
 }
 </script>
