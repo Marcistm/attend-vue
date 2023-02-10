@@ -29,14 +29,16 @@ const store = new Vuex.Store({
                         String( condition[ key ] ).trim().toLowerCase() )
                 } )
             } )},
-        table:[{role:0,item:[{name:'首页',id:'1'},{name:'请假',id:"2"},{name:'离校申请',id:'3'},{name:'返校申请',id:'4'},{name:'健康档案',id:'5'},
-                {name:'每日健康申报',id:'6'},{name:'核酸记录',id:'7'}]},
-            {role:1,item:[{name:'首页',id:'1'},{name:'考勤统计',id:'2'},{name:'申请审批',id:'3'},{name:'发起考勤',id:'4'}]},
-            {role:2,item:[{name:'首页',id:'1'},{name:'审批项目管理',id:'2'},{name:'通知管理',id:'3'},{name:'公告管理',id:'4'},{name:'用户管理',id:'5'}]},
+        table:[
+            {role:0,item:[{name:'首页',id:'1'},{name:'请假',id:"2"},{name:'离校申请',id:'3'},{name:'返校申请',id:'4'},{name:'健康档案',id:'5'}, {name:'每日健康申报',id:'6'},{name:'核酸记录',id:'7'}]},
+            {role:1,item:[{name:'首页',id:'1'},{name:'考勤统计',id:'2'},{name:'申请审批',id:'3'},{name:'发起考勤',id:'4'},{name:'通知管理',id:'5'}]},
+            {role:2,item:[{name:'首页',id:'1'},{name:'审批项目管理',id:'2'},{name:'通知管理',id:'3'},{name:'公告管理',id:'4'},{name:'学生用户管理',id:'5'},{name:'教师用户管理',id:'5'}]},
         ],
         tableData:[
             {name:'请假',table:'ask_for_leave',column:[{label:'发起时间',name:'time'},{label:'当前状态',name:'condition'}]},
-            {name:'用户管理',table:'user_table',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'},{label:'身份',name:'privilege'}]},
+            {name:'学生用户管理',table:'student',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'}]},
+            {name:'通知管理',table:'notice',column:[{label:'时间',name:'time'},{label:'内容',name:'text'}]},
+            {name:'教师管理',table:'teacher',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'}]},
         ],
         data:[]
 

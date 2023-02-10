@@ -9,9 +9,11 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <Board v-if="name==='首页'||name===''"></Board>
+        <Index v-if="name==='首页'||name===''"></Index>
         <DataTable v-if="['请假'].includes(name)" :name="name"></DataTable>
-        <UserManage v-if="name==='用户管理'" :name="name"></UserManage>
+        <StudentManage v-if="name==='学生用户管理'" :name="name"></StudentManage>
+        <TeacherManage v-if="name==='教师用户管理'" :name="name"></TeacherManage>
+        <Board v-if="name==='公告管理'" :name="name"></Board>
       </el-main>
 
   </el-container>
@@ -20,11 +22,13 @@
 <script>
 import DataTable from "@/components/DataTable";
 import Board from "@/components/Board";
-import UserManage from "@/components/UserManage";
+import StudentManage from "@/components/StudentManage";
+import TeacherManage from "@/components/TeacherManage";
+import Index from "@/components/Index";
 
 export default {
   name: "Home",
-  components: {UserManage, Board, DataTable},
+  components: {TeacherManage, StudentManage, Board, DataTable,Index},
   data(){
     return{
       table:[],
