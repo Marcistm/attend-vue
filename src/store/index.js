@@ -31,14 +31,14 @@ const store = new Vuex.Store({
             } )},
         table:[
             {role:0,item:[{name:'首页',id:'1'},{name:'请假',id:"2"},{name:'离校申请',id:'3'},{name:'返校申请',id:'4'},{name:'健康档案',id:'5'}, {name:'每日健康申报',id:'6'},{name:'核酸记录',id:'7'}]},
-            {role:1,item:[{name:'首页',id:'1'},{name:'考勤统计',id:'2'},{name:'申请审批',id:'3'},{name:'发起考勤',id:'4'},{name:'通知管理',id:'5'}]},
-            {role:2,item:[{name:'首页',id:'1'},{name:'审批项目管理',id:'2'},{name:'通知管理',id:'3'},{name:'公告管理',id:'4'},{name:'学生用户管理',id:'5'},{name:'教师用户管理',id:'5'}]},
+            {role:1,item:[{name:'首页',id:'8'},{name:'考勤统计',id:'9'},{name:'申请审批',id:'10'},{name:'发起考勤',id:'11'},{name:'通知管理',id:'12'}]},
+            {role:2,item:[{name:'首页',id:'13'},{name:'审批项目管理',id:'14'},{name:'通知管理',id:'15'},{name:'公告管理',id:'16'},{name:'学生用户管理',id:'17'},{name:'教师用户管理',id:'18'}]},
         ],
         tableData:[
             {name:'请假',table:'ask_for_leave',column:[{label:'发起时间',name:'time'},{label:'当前状态',name:'condition'}]},
-            {name:'学生用户管理',table:'student',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'}]},
+            {name:'学生用户管理',table:'student',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'},{label:'班级',name:'class'}]},
             {name:'通知管理',table:'notice',column:[{label:'时间',name:'time'},{label:'内容',name:'text'}]},
-            {name:'教师管理',table:'teacher',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'}]},
+            {name:'教师用户管理',table:'teacher',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'}]},
         ],
         data:[]
 
@@ -50,9 +50,8 @@ const store = new Vuex.Store({
                 let sql = 'select a.'
                 sql = sql + t[0].column.map(function (t) { return t.name; }).join(',a.');
                 sql = sql + ' from ' + t[0].table + ' a'
-                let path='http://127.0.0.1:5001/get/data'
+                let path='http://43.143.116.236:5001/get/data'
                 axios.get(path, { params: { sql: sql } }).then(res => {
-                    console.log(res)
                     context.commit('SET_TABLE_DATA', res.data.data)
                 })
             }

@@ -45,7 +45,7 @@ export default {
   },
   methods:{
     reset_password(username){
-      let path='http://127.0.0.1:5001/password/reset'
+      let path='http://43.143.116.236:5001/password/reset'
       axios.get(path, { params: { username: username } }).then(res => {
         console.log(res)
       })

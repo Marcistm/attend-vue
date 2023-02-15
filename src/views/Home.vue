@@ -10,10 +10,7 @@
       </el-aside>
       <el-main>
         <Index v-if="name==='首页'||name===''"></Index>
-        <DataTable v-if="['请假'].includes(name)" :name="name"></DataTable>
-        <StudentManage v-if="name==='学生用户管理'" :name="name"></StudentManage>
-        <TeacherManage v-if="name==='教师用户管理'" :name="name"></TeacherManage>
-        <Board v-if="name==='公告管理'" :name="name"></Board>
+        <DataTable v-if="['请假','学生用户管理','教师用户管理'].includes(name)" :name="name"></DataTable>
       </el-main>
 
   </el-container>
@@ -21,14 +18,11 @@
 
 <script>
 import DataTable from "@/components/DataTable";
-import Board from "@/components/Board";
-import StudentManage from "@/components/StudentManage";
-import TeacherManage from "@/components/TeacherManage";
 import Index from "@/components/Index";
 
 export default {
   name: "Home",
-  components: {TeacherManage, StudentManage, Board, DataTable,Index},
+  components: { DataTable,Index},
   data(){
     return{
       table:[],
