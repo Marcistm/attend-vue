@@ -39,6 +39,8 @@ const store = new Vuex.Store({
             {name:'学生用户管理',table:'student',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'},{label:'班级',name:'class'}]},
             {name:'通知管理',table:'notice',column:[{label:'时间',name:'time'},{label:'内容',name:'text'}]},
             {name:'教师用户管理',table:'teacher',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'}]},
+            {name:'公告管理',table:'board',column:[{label:'时间',name:'time'},{label:'内容',name:'text'}]}
+            ,
         ],
         data:[]
 

@@ -10,7 +10,7 @@
       </el-aside>
       <el-main>
         <Index v-if="name==='首页'||name===''"></Index>
-        <DataTable v-if="['请假','学生用户管理','教师用户管理'].includes(name)" :name="name"></DataTable>
+        <DataTable v-if="['请假','学生用户管理','教师用户管理','通知管理','公告管理'].includes(name)" :name="name"></DataTable>
       </el-main>
 
   </el-container>

@@ -69,6 +69,7 @@ export default {
       let t=this.$store.state.filter({name: this.name}, this.$store.state.tableData)[0]
       this.columns = t.column
       this.table=t.table
+      console.log(t.table)
       let name = this.name
       this.$store.dispatch('getData', {name})
     },
@@ -160,7 +161,7 @@ export default {
     },
     delete_user(username){
       let path='http://43.143.116.236:5001/user/delete'
-      let parmas={username:username}
+      let parmas={username:username,table:this.table}
       axios.get(path,{params:parmas}).then(res=>{
         if (res.data.code===200){
           this.$message({
