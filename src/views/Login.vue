@@ -1,16 +1,18 @@
 <template>
   <div class="login-page" >
     <div class="login-panel">
-    <el-form :model="loginForm" :rules="rules" ref="loginForm">
+    <el-form :model="loginForm" :rules="rules" ref="loginForm" >
       <div class="text">
         <div>LOGIN</div>
         <br>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="username" >
         <el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
-      <el-form-item prop="password"><el-input v-model="loginForm.password"  type="password" placeholder="默认密码12345678"></el-input></el-form-item>
+      <el-form-item prop="password" >
+        <el-input v-model="loginForm.password"  type="password" placeholder="默认密码12345678"></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button type="danger" @click="submitForm('loginForm')" >登录</el-button>
         </el-form-item>
@@ -119,6 +121,11 @@ export default {
 </script>
 
 <style scoped>
+
+.el-form{
+  width: 300px;
+  text-align: center;
+}
 .login-page{
 
   position: absolute;
@@ -151,7 +158,7 @@ export default {
   border-width: 1px;
   border-style: solid;
   background-color: transparent;
-  width: 800px;
+  width: 900px;
   height: 250px;
   opacity: 1;
 }
