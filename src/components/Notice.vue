@@ -1,8 +1,8 @@
 <template>
-<div>
-  <el-form></el-form>
-  <el-table></el-table>
-</div>
+<el-form>
+  <el-form-item>
+  </el-form-item>
+</el-form>
 </template>
 
 <script>

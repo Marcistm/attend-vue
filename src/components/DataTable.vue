@@ -4,7 +4,7 @@
     <el-form>
       <el-form-item>
         <el-button type="primary" @click="dialog=true">新增</el-button>
-        <el-button type="primary" @click="upload=true">批量导入</el-button>
+        <el-button v-if="!['通知管理','公告管理'].includes(name)" type="primary" @click="upload=true">批量导入</el-button>
 
       </el-form-item>
     </el-form>
@@ -21,6 +21,7 @@
 </el-table>
     <el-dialog :title="name" :visible.sync="dialog">
       <AskForLeave v-if="name==='请假'"></AskForLeave>
+
     </el-dialog>
     <el-dialog :visible.sync="upload">
       <el-form :inline="true">
