@@ -21,7 +21,7 @@
 </el-table>
     <el-dialog :title="name" :visible.sync="dialog">
       <AskForLeave v-if="name==='请假'"></AskForLeave>
-
+      <notice v-if="name==='通知管理'"></notice>
     </el-dialog>
     <el-dialog :visible.sync="upload">
       <el-form :inline="true">
@@ -42,9 +42,10 @@ import AskForLeave from "@/components/AskForLeave";
 import * as XLSX from "xlsx";
 const Excel = require('exceljs');
 import axios from "axios";
+import Notice from "@/components/Notice";
 export default {
   name: "DataTable",
-  components: {AskForLeave},
+  components: {Notice, AskForLeave},
   data() {
     return {
       table:'',
