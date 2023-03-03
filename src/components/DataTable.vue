@@ -4,8 +4,7 @@
     <el-form>
       <el-form-item>
         <el-button type="primary" @click="dialog=true">新增</el-button>
-        <el-button v-if="!['通知管理','公告管理'].includes(name)" type="primary" @click="upload=true">批量导入</el-button>
-
+        <el-button v-if="!['通知管理','公告管理','审批项目管理','请假'].includes(name)" type="primary" @click="upload=true">批量导入</el-button>
       </el-form-item>
     </el-form>
 <el-table :data="$store.state.data">

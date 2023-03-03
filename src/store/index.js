@@ -35,11 +35,15 @@ const store = new Vuex.Store({
             {role:2,item:[{name:'首页',id:'13'},{name:'审批项目管理',id:'14'},{name:'通知管理',id:'15'},{name:'公告管理',id:'16'},{name:'学生用户管理',id:'17'},{name:'教师用户管理',id:'18'}]},
         ],
         tableData:[
+            {name:'离校申请',table:'leave_school',column:[{label:'发起时间',name:'time'},{label:'当前状态',name:'condition'}]},
+            {name:'返校申请',table:'return_school',column:[{label:'发起时间',name:'time'},{label:'当前状态',name:'condition'}]},
             {name:'请假',table:'ask_for_leave',column:[{label:'发起时间',name:'time'},{label:'当前状态',name:'condition'}]},
             {name:'学生用户管理',table:'student',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'},{label:'班级',name:'class'}]},
             {name:'通知管理',table:'notice',column:[{label:'时间',name:'time'},{label:'内容',name:'text'}]},
             {name:'教师用户管理',table:'teacher',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'}]},
             {name:'公告管理',table:'board',column:[{label:'时间',name:'time'},{label:'内容',name:'text'}]},
+            {name:'审批项目管理',table:'item',column:[{label:'项目名称',name:'item'},{label:'使用状态',name:'condition'}]},
+            {name:'申请审批',table:'ask_judge',column:[{label:'项目名称',name:'name'},{label: '发起人',name:'student'},{label:'发起时间',name:'time'}]},
         ],
         data:[]
 
