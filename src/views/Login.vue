@@ -81,7 +81,9 @@ export default {
             this.loading = false
             this.$message.error('没有登录系统的权限')
           } else {
+            localStorage.setItem('name',responses.data.name)
             localStorage.setItem('permission', responses.data.privilege)
+            localStorage.setItem('username',this.loginForm.username)
             setUser(this.loginForm.username)
             this.$store
                 .dispatch('user/login',{token: responses.data.token})

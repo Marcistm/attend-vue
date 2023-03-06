@@ -36,7 +36,7 @@
   </el-table-column>
   <el-table-column >
     <template slot-scope="scope">
-      <el-input v-if="tag&[2,3].includes(scope.$index)" v-model="scope.row.item4"></el-input>
+      <el-input v-if="tag&[3].includes(scope.$index)" v-model="scope.row.item4"></el-input>
       <span v-else>{{scope.row.item4}}</span>
     </template>
   </el-table-column>
@@ -54,10 +54,43 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "HealthRecord",
   mounted() {
+    let path = 'http://127.0.0.1:5001/student/health_record/get'
+    let param = {
+      username: localStorage.getItem('username'),
+    }
+    axios.get(path,{params:param}).then(res=>{
+     let t=res.data.data[0]
+      const gmtTime = new Date(t.birthday);
+      const year = gmtTime.getFullYear();
+      const month = gmtTime.getMonth() + 1; // 注意：getMonth方法返回的是0-11，需要加1
+      const day = gmtTime.getDate();
+      const dateStr = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+      this.table[0].item2=t.name
+      this.table[0].item4=t.sex
+      this.table[0].item6=dateStr
+      this.table[0].item8=t.native_place
 
+      this.table[1].item2=t.telephone
+      this.table[1].item4=t.college
+      this.table[1].item6=t.class
+      this.table[1].item8=t.nation
+
+      this.table[2].item2=t.is_marriage
+      this.table[2].item4=t.identity
+      this.table[2].item7=t.address
+
+      this.table[3].item2=t.blood
+      this.table[3].item4=t.genetic_history
+      this.table[3].item7=t.drug_allergy_history
+
+      this.table[4].item3=t.common_disease
+      this.table[5].item3=t.else_disease
+    })
   },
   data(){
     return{
@@ -121,7 +154,22 @@ export default {
     },
 
     save(){
-      console.log(1)
+      let path='http://127.0.0.1:5001/student/health_record/update'
+      let params={}
+      params['username']=localStorage.getItem('username')
+      params['is_marriage']=this.table[2].item2
+      params['address']=this.table[2].item7
+      params['genetic_history']=this.table[3].item4
+      params['drug_allergy_history']=this.table[3].item7
+      params['common_disease']=this.table[4].item3
+      params['else_disease']=this.table[5].item3
+      axios.post(path,params).then(res=>{
+        console.log(res)
+       if(res.data.code===200){
+         this.$message.success('更新成功')
+         this.tag=false
+       }
+      })
     }
   }
 }
