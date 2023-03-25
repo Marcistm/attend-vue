@@ -59,7 +59,7 @@ import axios from "axios";
 export default {
   name: "HealthRecord",
   mounted() {
-    let path = 'http://127.0.0.1:5001/student/health_record/get'
+    let path = 'http://43.143.116.236:5001/student/health_record/get'
     let param = {
       username: localStorage.getItem('username'),
     }
@@ -154,7 +154,7 @@ export default {
     },
 
     save(){
-      let path='http://127.0.0.1:5001/student/health_record/update'
+      let path='http://43.143.116.236:5001/student/health_record/update'
       let params={}
       params['username']=localStorage.getItem('username')
       params['is_marriage']=this.table[2].item2

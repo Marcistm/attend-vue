@@ -10,9 +10,11 @@
       </el-aside>
       <el-main>
         <Index v-if="name==='首页'||name===''"></Index>
-        <DataTable v-if="['请假','学生用户管理','教师用户管理','通知管理','公告管理','审批项目管理','离校申请','返校申请'].includes(name)" :name="name"></DataTable>
+        <DataTable v-if="['学生用户管理','教师用户管理','通知管理','公告管理','审批项目管理','离校申请','返校申请'].includes(name)" :name="name"></DataTable>
         <Attend v-if="name==='发起考勤'"></Attend>
         <HealthRecord v-if="name==='健康档案'"></HealthRecord>
+        <HealthDeclaration v-if="name==='每日健康申报'"></HealthDeclaration>
+        <AskForLeave v-if="'请假'===name"></AskForLeave>
       </el-main>
 
   </el-container>
@@ -23,10 +25,12 @@ import DataTable from "@/components/DataTable";
 import Index from "@/components/Index";
 import Attend from "@/components/Attend";
 import HealthRecord from "@/components/HealthRecord";
+import HealthDeclaration from "@/components/HealthDeclaration";
+import AskForLeave from "@/components/AskForLeave";
 
 export default {
   name: "Home",
-  components: {HealthRecord, Attend, DataTable,Index},
+  components: {AskForLeave, HealthRecord, Attend, DataTable,Index,HealthDeclaration},
   data(){
     return{
       table:[],

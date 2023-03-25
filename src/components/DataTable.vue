@@ -3,7 +3,7 @@
     {{Data}}
     <el-form>
       <el-form-item>
-        <el-button type="primary" @click="dialog=true">新增</el-button>
+        <el-button type="primary" @click="$store.state.dialog=true">新增</el-button>
         <el-button v-if="!['通知管理','公告管理','审批项目管理','请假'].includes(name)" type="primary" @click="upload=true">批量导入</el-button>
       </el-form-item>
     </el-form>
@@ -12,13 +12,13 @@
 </el-table-column>
   <el-table-column label="操作">
     <template slot-scope="scope">
-    <el-button @click="reset_password(scope.row.username)">密码重置</el-button>
+    <el-button v-if="name!=='请假'" @click="reset_password(scope.row.username)">密码重置</el-button>
     <el-button>查看详情</el-button>
     <el-button type="danger" @click="delete_user(scope.row.username)">删除</el-button>
     </template>
   </el-table-column>
 </el-table>
-    <el-dialog :title="name" :visible.sync="dialog">
+    <el-dialog :title="name" :visible.sync="$store.state.dialog">
       <AskForLeave v-if="name==='请假'"></AskForLeave>
       <notice v-if="name==='通知管理'"></notice>
     </el-dialog>
@@ -49,7 +49,6 @@ export default {
     return {
       table:'',
       upload: false,
-      dialog: false,
       columns: [],
       tableData: [],
     }
@@ -70,7 +69,6 @@ export default {
       let t=this.$store.state.filter({name: this.name}, this.$store.state.tableData)[0]
       this.columns = t.column
       this.table=t.table
-      console.log(t.table)
       let name = this.name
       this.$store.dispatch('getData', {name})
     },
