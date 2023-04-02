@@ -20,7 +20,7 @@
     <el-table-column label="操作">
       <template slot-scope="scope">
         <el-button type="primary">查看详情</el-button>
-        <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
+        <el-button type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
         <el-button type="success" @click="update(scope.row.id)" :disabled="scope.row.condition!==0">修改</el-button>
       </template>
     </el-table-column>
@@ -56,6 +56,7 @@
           :on-preview="previewFile"
           :on-change="handleChange"
           :on-remove="handleRemove"
+
       >
         <el-button type="primary">选取</el-button>
       </el-upload>
@@ -70,6 +71,7 @@
 </template>
 <script>
 import axios from "axios";
+import {MessageBox} from "element-ui";
 function formatTime(timestamp) {
   const date = new Date(timestamp);
   const year = date.getFullYear();
@@ -118,7 +120,6 @@ export default {
   },
   methods:{
     update(id){
-
       let path='http://127.0.0.1:5001/ask_for_leave/preview'
       let parmas={
         id:id
@@ -126,17 +127,41 @@ export default {
       axios.get(path,{params:parmas}).then(res=>{
         console.log(res)
         this.dialog=true
+        this.table.username=localStorage.getItem('username')
+        this.table.name=localStorage.getItem('name')
+        this.table.reason=res.data.data[0].reason
+        this.table.date[0]=formatTime(res.data.data[0].start_time)
+        this.table.date[1]=formatTime(res.data.data[0].end_time)
+        res.data.data.forEach(item=>{
+          let fileObj = {
+            uid: Date.now(),
+            name: item['file_name'],
+            url: item['file_url']
+          }
+          this.fileList.push(fileObj)
+        })
       })
-
     },
-    del(id){
-      let path='http://127.0.0.1:5001/ask_for_leave/delete'
-      let parmas={
-        id:id
-      }
-      axios.post(path,parmas).then(res=>{
-        console.log(res)
+    handleDelete(id) {
+      MessageBox.confirm('确定要删除该请假条吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 用户点击确定按钮，继续执行删除操作
+        let path='http://127.0.0.1:5001/ask_for_leave/delete'
+        let parmas={
+          id:id
+        }
+        axios.post(path,parmas).then(res=>{
+          if (res.data.code===200){
+            this.$message.success('删除成功')
+          }
+        })
+      }).catch(() => {
+        // 用户点击取消按钮，不执行删除操作
       })
+      this.get_data()
     },
     get_data(){
       let name='请假'
@@ -158,6 +183,10 @@ export default {
      this.fileList=fileList
     },
     submit() {
+      if (this.data.length>0){
+        this.$message.error('已经提交过一次请假,无法再次提交请假单')
+        return
+      }
       this.$refs['table'].validate((valid) => {
         if (valid){
           const formData = new FormData();
@@ -180,6 +209,7 @@ export default {
                 this.table.reason=''
                 this.table.date=[]
                 this.fileList=[]
+                this.get_data()
                 // todo: 处理响应结果
               })
               .catch((error) => {
@@ -208,7 +238,6 @@ export default {
         item['time'] = formatTime(item['time']);
         item['end_time'] = formatTime(item['end_time']);
       });
-      console.log(this.data)
     }
   },
 
