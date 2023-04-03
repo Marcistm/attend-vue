@@ -12,16 +12,16 @@
     <el-table-column label="结束时间" prop="end_time"></el-table-column>
 <el-table-column label="状态">
   <template slot-scope="scope">
-    <span v-if="scope.row.condition==0">审核中</span>
-    <span v-if="scope.row.condition==-1">拒绝</span>
-    <span v-if="scope.row.condition==1">通过</span>
+    <span v-if="scope.row.condition===0">审核中</span>
+    <span v-if="scope.row.condition===-1">拒绝</span>
+    <span v-if="scope.row.condition===1">通过</span>
   </template>
 </el-table-column>
     <el-table-column label="操作">
       <template slot-scope="scope">
         <el-button type="primary">查看详情</el-button>
         <el-button type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
-        <el-button type="success" @click="update(scope.row.id)" :disabled="scope.row.condition!==0">修改</el-button>
+        <el-button type="success" v-if="scope.row.condition===0" @click="update(scope.row.id)" :disabled="scope.row.condition!==0">修改</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -56,7 +56,7 @@
           :on-preview="previewFile"
           :on-change="handleChange"
           :on-remove="handleRemove"
-
+          show-file-list
       >
         <el-button type="primary">选取</el-button>
       </el-upload>
@@ -125,7 +125,7 @@ export default {
         id:id
       }
       axios.get(path,{params:parmas}).then(res=>{
-        console.log(res)
+        this.fileList=[]
         this.dialog=true
         this.table.username=localStorage.getItem('username')
         this.table.name=localStorage.getItem('name')
@@ -220,7 +220,9 @@ export default {
         }
      })
     },
+
     previewFile(file) {
+
       const url = URL.createObjectURL(file.raw);
       window.open(url);
     },
