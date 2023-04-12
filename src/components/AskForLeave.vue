@@ -21,7 +21,7 @@
       <template slot-scope="scope">
         <el-button type="primary">查看详情</el-button>
         <el-button type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
-        <el-button type="success" v-if="scope.row.condition===0" @click="update(scope.row.id)" :disabled="scope.row.condition!==0">修改</el-button>
+        <el-button type="success" v-if="scope.row.condition===0" @click="update_load(scope.row.id)" :disabled="scope.row.condition!==0">修改</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -63,6 +63,7 @@
     </el-form-item>
     <el-form-item>
       <el-button type="success" @click="submit">提交</el-button>
+      <el-button type="success" @click="update">更新</el-button>
     </el-form-item>
   </el-form>
 
@@ -98,7 +99,7 @@ export default {
           return time.getTime() < today.getTime();
         },
       },
-
+      id:'',
       dialog:false,
       table:{
         date:[],
@@ -120,6 +121,23 @@ export default {
   },
   methods:{
     update(id){
+      let path='http://127.0.0.1:5001/ask_for_leave/update' // update path
+      let params={ // update parameters
+        id:id,
+        reason: this.table.reason,
+        start_time: new Date(this.table.date[0]).getTime(),
+        end_time: new Date(this.table.date[1]).getTime(),
+        file_list: this.fileList.map(file => file.url)
+      }
+      axios.post(path,params).then(res=>{ // use post method to update data
+        if (res.data.code===200){
+          this.$message.success('更新成功')
+          this.dialog=false
+          this.get_data()
+        }
+      })
+    },
+    update_load(id){
       let path='http://127.0.0.1:5001/ask_for_leave/preview'
       let parmas={
         id:id
@@ -134,7 +152,7 @@ export default {
         this.table.date[1]=formatTime(res.data.data[0].end_time)
         res.data.data.forEach(item=>{
           let fileObj = {
-            uid: Date.now(),
+            uid: Math.random(),
             name: item['file_name'],
             url: item['file_url']
           }
@@ -156,16 +174,20 @@ export default {
         axios.post(path,parmas).then(res=>{
           if (res.data.code===200){
             this.$message.success('删除成功')
+            this.get_data()
           }
         })
+        console.log(this.fileList)
       }).catch(() => {
         // 用户点击取消按钮，不执行删除操作
       })
-      this.get_data()
+
     },
     get_data(){
-      let name='请假'
-      this.$store.dispatch('getData', {name})
+      return new Promise((resolve, reject) => {
+        let name = '请假'
+        this.$store.dispatch('getData', {name})
+      })
     },
     open(){
       if (this.data.length>0){
@@ -222,15 +244,24 @@ export default {
     },
 
     previewFile(file) {
-
-      const url = URL.createObjectURL(file.raw);
-      window.open(url);
+      console.log(file)
+      console.log(file.name);
+      let downloadElement = document.createElement('a');
+      downloadElement.href = file.url;
+      downloadElement.download = file.name;
+      document.body.appendChild(downloadElement);
+      downloadElement.click();
+      document.body.removeChild(downloadElement);
     },
+
+
+
 
   },
   mounted() {
-   this.get_data()
-
+   this.get_data().then(()=>{
+     this.id=this.data[0].id
+   })
   },
   watch: {
     '$store.state.data': function(newVal) {

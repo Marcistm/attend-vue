@@ -33,18 +33,19 @@ const store = new Vuex.Store({
         table:[
             {role:0,item:[{name:'首页',id:'1'},{name:'请假',id:"2"},{name:'离校申请',id:'3'},{name:'返校申请',id:'4'},{name:'健康档案',id:'5'}, {name:'每日健康申报',id:'6'},{name:'核酸记录',id:'7'},{name:'上课签到',id:'19'}]},
             {role:1,item:[{name:'首页',id:'8'},{name:'考勤统计',id:'9'},{name:'申请审批',id:'10'},{name:'发起考勤',id:'11'},{name:'通知管理',id:'12'}]},
-            {role:2,item:[{name:'首页',id:'13'},{name:'通知管理',id:'15'},{name:'公告管理',id:'16'},{name:'学生用户管理',id:'17'},{name:'教师用户管理',id:'18'}]},
+            {role:2,item:[{name:'首页',id:'13'},{name:'通知管理',id:'15'},{name:'公告管理',id:'16'},{name:'用户管理',id:'17'}]},
         ],
         tableData:[
             {name:'离校申请',table:'leave_school',column:[{label:'发起时间',name:'time'},{label:'当前状态',name:'condition'}]},
             {name:'返校申请',table:'return_school',column:[{label:'发起时间',name:'time'},{label:'当前状态',name:'condition'}]},
             {name:'请假',table:'ask_for_leave',column:[{label:'发起时间',name:'time'},{label:'当前状态',name:'condition'},{label:'id',name:'id'},{label:'理由',name:'reason'},{label:'开始时间',name:'start_time'},{label:'结束时间',name:'end_time'}]},
-            {name:'学生用户管理',table:'student',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'},{label:'班级',name:'class'}]},
+            {name:'用户管理',table:'user_table',column:[{label:'id',name:'id'},{label:'用户名',name:'username'},{label:'姓名',name:'name'},{label:'身份',name:'privilege'}]},
             {name:'通知管理',table:'notice',column:[{label:'时间',name:'time'},{label:'内容',name:'text'}]},
             {name:'教师用户管理',table:'teacher',column:[{label:'用户名',name:'username'},{label:'姓名',name:'name'}]},
             {name:'公告管理',table:'board',column:[{label:'时间',name:'time'},{label:'内容',name:'text'}]},
             {name:'审批项目管理',table:'item',column:[{label:'项目名称',name:'item'},{label:'使用状态',name:'condition'}]},
             {name:'申请审批',table:'ask_judge',column:[{label:'项目名称',name:'name'},{label: '发起人',name:'student'},{label:'发起时间',name:'time'}]},
+
         ],
         data:[]
 
@@ -57,7 +58,7 @@ const store = new Vuex.Store({
                 let sql = 'select a.'
                 sql = sql + t[0].column.map(function (t) { return t.name; }).join(',a.');
                 sql = sql + ' from ' + t[0].table + ' a'
-                let path='http://43.143.116.236:5001/get/data'
+                let path='http://127.0.0.1:5001/get/data'
                 axios.get(path, { params: { sql: sql } }).then(res => {
                     context.commit('SET_TABLE_DATA', res.data.data)
                 })

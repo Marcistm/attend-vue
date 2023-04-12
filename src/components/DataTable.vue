@@ -1,26 +1,26 @@
 <template>
   <div>
-    {{Data}}
+
     <el-form>
       <el-form-item>
         <el-button type="primary" @click="$store.state.dialog=true">新增</el-button>
-        <el-button v-if="!['通知管理','公告管理','审批项目管理','请假'].includes(name)" type="primary" @click="upload=true">批量导入</el-button>
+        <el-button v-if="!['通知管理','公告管理','审批项目管理','请假','离校申请','返校申请'].includes(name)" type="primary" @click="upload=true">批量导入</el-button>
       </el-form-item>
     </el-form>
-<el-table :data="$store.state.data">
-<el-table-column  :key="i.name" v-for="i in columns" :label="i.label" :prop="i.name" >
-</el-table-column>
+<el-table :data="data">
+  <el-table-column v-if="i.name !== 'id'" :key="i.name" v-for="i in columns" :label="i.label" :prop="i.name"></el-table-column>
   <el-table-column label="操作">
     <template slot-scope="scope">
     <el-button v-if="name!=='请假'" @click="reset_password(scope.row.username)">密码重置</el-button>
     <el-button>查看详情</el-button>
-    <el-button type="danger" @click="delete_user(scope.row.username)">删除</el-button>
+    <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
     </template>
   </el-table-column>
 </el-table>
     <el-dialog :title="name" :visible.sync="$store.state.dialog">
       <AskForLeave v-if="name==='请假'"></AskForLeave>
       <notice v-if="name==='通知管理'"></notice>
+      <leave-school v-if="name==='离校申请'"></leave-school>
     </el-dialog>
     <el-dialog :visible.sync="upload">
       <el-form :inline="true">
@@ -42,11 +42,13 @@ import * as XLSX from "xlsx";
 const Excel = require('exceljs');
 import axios from "axios";
 import Notice from "@/components/Notice";
+import LeaveSchool from "@/components/LeaveSchool";
 export default {
   name: "DataTable",
-  components: {Notice, AskForLeave},
+  components: {LeaveSchool, Notice, AskForLeave},
   data() {
     return {
+      data:[],
       table:'',
       upload: false,
       columns: [],
@@ -59,11 +61,6 @@ export default {
   mounted() {
     this.getData()
   },
-  computed:{
-    Data(){
-      return this.getData()
-    }
-  },
   methods: {
     getData(){
       let t=this.$store.state.filter({name: this.name}, this.$store.state.tableData)[0]
@@ -71,6 +68,18 @@ export default {
       this.table=t.table
       let name = this.name
       this.$store.dispatch('getData', {name})
+      this.data=this.$store.state.data
+      if (name==='用户管理'){
+        this.data = this.data.filter(data => data.username !== 'admin')
+        this.data.forEach(item=>{
+          if (item['privilege']===0){
+            item['privilege']='学生'
+          }
+          if (item['privilege']===1){
+            item['privilege']='老师'
+          }
+        })
+      }
     },
     handleFileChange(event) {
       const file = event.target.files[0]
@@ -158,28 +167,33 @@ export default {
         }
       })
     },
-    delete_user(username){
-      let path='http://43.143.116.236:5001/user/delete'
-      let parmas={username:username,table:this.table}
-      axios.get(path,{params:parmas}).then(res=>{
-        if (res.data.code===200){
-          this.$message({
-            type: "success",
-            message: '删除成功',
-            showClose: true
-          })
-        }
-        if (res.data.code===404){
-          this.$message({
-            type: "error",
-            message: '删除失败',
-            showClose: true
-          })
-        }
+    del(id) {
+      this.$confirm('确定要删除该项吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let path = 'http://127.0.0.1:5001/delete'
+        let params = {id: id, table: this.table}
+        axios.get(path, {params: params}).then(res => {
+          if (res.data.code === 200) {
+            this.$message({
+              type: 'success',
+              message: '删除成功',
+              showClose: true
+            })
+          }
+        })
+        this.reloadData()
+      }).catch(() => {
+        // 用户取消删除操作
       })
+    },
+    reloadData() {
       let name = this.name
       this.$store.dispatch('getData', {name})
     }
+
   }
 }
 </script>

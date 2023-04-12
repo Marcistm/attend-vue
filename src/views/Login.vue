@@ -92,7 +92,6 @@ export default {
                   // 登陆成功后重定向
                   // 如果初次登录跳转到更改密码页面
                   setUserName(responses.data.name)
-
                   if (responses.data.has_login === 0) {
                     this.$router.push({
                       path: this.$route.query.redirect || '/resetPass'
@@ -105,7 +104,6 @@ export default {
                 })
                 .catch(err=>{
                   this.loading = true
-                  // console.log(err)
                 })
           }
         } else {
