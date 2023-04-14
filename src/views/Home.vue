@@ -10,7 +10,7 @@
       </el-aside>
       <el-main>
         <Index v-if="name==='首页'||name===''"></Index>
-        <DataTable v-if="['用户管理','通知管理','公告管理','审批项目管理','离校申请','返校申请'].includes(name)" :name="name"></DataTable>
+        <DataTable v-if="['用户管理','通知管理','公告管理','离校申请','返校申请'].includes(name)" :name="name"></DataTable>
         <Attend v-if="name==='发起考勤'"></Attend>
         <HealthRecord v-if="name==='健康档案'"></HealthRecord>
         <HealthDeclaration v-if="name==='每日健康申报'"></HealthDeclaration>

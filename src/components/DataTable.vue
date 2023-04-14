@@ -12,7 +12,7 @@
   <el-table-column label="操作">
     <template slot-scope="scope">
     <el-button v-if="name!=='请假'" @click="reset_password(scope.row.username)">密码重置</el-button>
-    <el-button>查看详情</el-button>
+<!--    <el-button>查看详情</el-button>-->
     <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
     </template>
   </el-table-column>
@@ -58,28 +58,38 @@ export default {
   props: {
     name: String
   },
+  watch: {
+    name: function(newValue, oldValue) {
+      this.getData();
+    }
+  },
   mounted() {
     this.getData()
   },
   methods: {
-    getData(){
+    getData:function (){
       let t=this.$store.state.filter({name: this.name}, this.$store.state.tableData)[0]
       this.columns = t.column
       this.table=t.table
-      let name = this.name
-      this.$store.dispatch('getData', {name})
-      this.data=this.$store.state.data
-      if (name==='用户管理'){
-        this.data = this.data.filter(data => data.username !== 'admin')
-        this.data.forEach(item=>{
-          if (item['privilege']===0){
-            item['privilege']='学生'
-          }
-          if (item['privilege']===1){
-            item['privilege']='老师'
-          }
-        })
-      }
+      let sql = 'select a.'
+      sql = sql + this.columns.map(function (t) { return t.name; }).join(',a.');
+      sql = sql + ' from ' + this.table + ' a'
+      let path='http://127.0.0.1:5001/get/data'
+      axios.get(path, { params: { sql: sql } }).then(res => {
+        this.data=res.data.data
+        if (this.name==='用户管理'){
+          this.data = this.data.filter(data => data.username !== 'admin')
+          this.data.forEach(item=>{
+            if (item['privilege']===0){
+              item['privilege']='学生'
+            }
+            if (item['privilege']===1){
+              item['privilege']='老师'
+            }
+          })
+        }
+      })
+
     },
     handleFileChange(event) {
       const file = event.target.files[0]
@@ -94,7 +104,6 @@ export default {
       reader.readAsBinaryString(file)
     },
     download(){
-
       let workbook = new Excel.Workbook();
       workbook.created = new Date();
       workbook.modified = new Date();
