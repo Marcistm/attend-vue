@@ -19,13 +19,13 @@
 </el-table-column>
     <el-table-column label="操作">
       <template slot-scope="scope">
-        <el-button type="primary">查看详情</el-button>
+        <el-button type="primary" @click="update_load(scope.row.id,'search')">查看详情</el-button>
+        <el-button type="success" v-if="scope.row.condition===0&scope.row.condition!==0" @click="update_load(scope.row.id,'update')" >修改</el-button>
         <el-button type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
-        <el-button type="success" v-if="scope.row.condition===0" @click="update_load(scope.row.id)" :disabled="scope.row.condition!==0">修改</el-button>
       </template>
     </el-table-column>
   </el-table>
-<el-dialog :visible.sync="dialog">
+<el-dialog :visible.sync="dialog" >
   <el-form  :model="table" :rules="rules" ref="table">
     <el-form-item label="学号" >
       {{table.username}}
@@ -47,23 +47,11 @@
       </el-date-picker>
     </el-form-item>
     <el-form-item label="附件">
-      <el-upload
-          ref="upload"
-          :auto-upload="false"
-          multiple
-          :action="'http://43.143.116.236:5001/ask_for_leave/add'"
-          :file-list="fileList"
-          :on-preview="previewFile"
-          :on-change="handleChange"
-          :on-remove="handleRemove"
-          show-file-list
-      >
-        <el-button type="primary">选取</el-button>
-      </el-upload>
+<Upload ref="files" type="请假" :original_id="id"></Upload>
     </el-form-item>
     <el-form-item>
-      <el-button type="success" @click="submit">提交</el-button>
-      <el-button type="success" @click="update">更新</el-button>
+      <el-button type="success" v-if="data.length===0" @click="submit">提交</el-button>
+      <el-button type="success" v-else @click="update">更新</el-button>
     </el-form-item>
   </el-form>
 
@@ -84,9 +72,10 @@ function formatTime(timestamp) {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-
+import Upload from "@/components/Upload";
 export default {
   name: "AskForLeave",
+  components: {Upload},
   data(){
     return{
       pickerOptions: {
@@ -120,16 +109,23 @@ export default {
     }
   },
   methods:{
-    update(id){
+    update(){
       let path='http://127.0.0.1:5001/ask_for_leave/update' // update path
-      let params={ // update parameters
-        id:id,
-        reason: this.table.reason,
-        start_time: new Date(this.table.date[0]).getTime(),
-        end_time: new Date(this.table.date[1]).getTime(),
-        file_list: this.fileList.map(file => file.url)
-      }
-      axios.post(path,params).then(res=>{ // use post method to update data
+      const formData = new FormData();
+      formData.append('id',this.id)
+      formData.append('reason',this.table.reason)
+      formData.append('start_time',formatTime(this.table.date[0]))
+      formData.append('end_time',formatTime(this.table.date[1]))
+      let old_file=[]
+      this.$refs.files.fileList.forEach(item=>{
+        if (item.status==='success'){
+          old_file.push(item.url)
+        }else {
+          formData.append('file',item.raw)
+        }
+      })
+      formData.append('old_file',JSON.stringify(old_file))
+      axios.post(path,formData).then(res=>{ // use post method to update data
         if (res.data.code===200){
           this.$message.success('更新成功')
           this.dialog=false
@@ -144,6 +140,7 @@ export default {
       }
       axios.get(path,{params:parmas}).then(res=>{
         this.fileList=[]
+        this.id=id
         this.dialog=true
         this.table.username=localStorage.getItem('username')
         this.table.name=localStorage.getItem('name')
@@ -198,12 +195,6 @@ export default {
       this.table.name=localStorage.getItem('name')
       this.dialog=true
     },
-    handleRemove(file, fileList) {
-      this.fileList=fileList
-    },
-    handleChange(file, fileList) {
-     this.fileList=fileList
-    },
     submit() {
       if (this.data.length>0){
         this.$message.error('已经提交过一次请假,无法再次提交请假单')
@@ -212,9 +203,9 @@ export default {
       this.$refs['table'].validate((valid) => {
         if (valid){
           const formData = new FormData();
-          for (let i = 0; i < this.fileList.length; i++) {
-            formData.append('file', this.fileList[i].raw)
-          }
+          this.$refs.files.fileList.forEach(item=>{
+              formData.append('file',item.raw)
+          })
           formData.append('username',this.table.username)
           formData.append('name',this.table.name)
           formData.append('reason',this.table.reason)
@@ -230,9 +221,7 @@ export default {
                 this.dialog=false
                 this.table.reason=''
                 this.table.date=[]
-                this.fileList=[]
                 this.get_data()
-                // todo: 处理响应结果
               })
               .catch((error) => {
                 console.error(error);
@@ -242,26 +231,9 @@ export default {
         }
      })
     },
-
-    previewFile(file) {
-      console.log(file)
-      console.log(file.name);
-      let downloadElement = document.createElement('a');
-      downloadElement.href = file.url;
-      downloadElement.download = file.name;
-      document.body.appendChild(downloadElement);
-      downloadElement.click();
-      document.body.removeChild(downloadElement);
-    },
-
-
-
-
   },
   mounted() {
-   this.get_data().then(()=>{
-     this.id=this.data[0].id
-   })
+   this.get_data()
   },
   watch: {
     '$store.state.data': function(newVal) {

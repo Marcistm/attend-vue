@@ -1,9 +1,8 @@
 <template>
 <el-upload
-    ref="upload"
     :auto-upload="false"
     multiple
-    :action="'http://43.143.116.236:5001/ask_for_leave/add'"
+    :action="'http://43.143.116.236:5001/upload'"
     :file-list="fileList"
     :on-preview="previewFile"
     :on-change="handleChange"
@@ -12,16 +11,19 @@
   <el-button type="primary">选取</el-button>
 </el-upload>
 </template>
-
 <script>
+import axios from "axios";
+
 export default {
   name: "Upload",
   props:{
-
+    original_id:String,
+    type:String
   },
   data(){
     return{
       fileList:[],
+      file_path:''
     }
   },methods:{
     handleRemove(file, fileList) {
@@ -30,9 +32,25 @@ export default {
     handleChange(file, fileList) {
       this.fileList=fileList
     },
+    get_old_file(){
+      let params={
+        original_id:this.original_id,
+        type:this.type
+      }
+      let path='http://127.0.0.1:5001/old_file/get'
+      axios.get(path,{params:params}).then(res=>{
+        console.log(res.data)
+       res.data.data.forEach(item=>{
+         let fileObj = {
+           uid: Math.random(),
+           name: item['file_name'],
+           url: item['file_url']
+         }
+         this.fileList.push(fileObj)
+       })
+      })
+    },
     previewFile(file) {
-      console.log(file)
-      console.log(file.name);
       let downloadElement = document.createElement('a');
       downloadElement.href = file.url;
       downloadElement.download = file.name;
@@ -40,6 +58,9 @@ export default {
       downloadElement.click();
       document.body.removeChild(downloadElement);
     },
+  },
+  mounted() {
+    this.get_old_file()
   }
 }
 </script>
