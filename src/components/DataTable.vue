@@ -4,7 +4,7 @@
     <el-form>
       <el-form-item>
         <el-button type="primary" @click="$store.state.dialog=true">新增</el-button>
-        <el-button v-if="!['通知管理','公告管理','审批项目管理','请假','离校申请','返校申请'].includes(name)" type="primary" @click="upload=true">批量导入</el-button>
+        <el-button v-if="['用户管理'].includes(name)" type="primary" @click="upload=true">批量导入</el-button>
       </el-form-item>
     </el-form>
 <el-table :data="data">
@@ -24,9 +24,19 @@
     </el-dialog>
     <el-dialog :visible.sync="upload">
       <el-form :inline="true">
-        <el-form-item><el-button type="primary" @click="download">下载模板</el-button></el-form-item>
-        <el-form-item><el-button type="primary" @click="upload_data">导入</el-button></el-form-item>
-        <el-form-item><input type="file" ref="fileInput" @change="handleFileChange"></el-form-item>
+        <el-form-item label="类型">
+          <el-select v-model="model" placeholder="请选择">
+            <el-option label="学生" value="学生"></el-option>
+            <el-option label="老师" value="老师"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="model!==''"><el-button type="primary" @click="download">下载模板</el-button></el-form-item>
+        <el-form-item>
+          <el-upload action="">
+            <el-button type="primary" @click="upload_data">导入</el-button>
+          </el-upload>
+        </el-form-item>
+
       </el-form>
       <el-table :data="tableData" v-if="tableData.length>0">
         <el-table-column  :key="i.name" v-for="i in columns" :label="i.label" :prop="i.name" >
@@ -48,6 +58,7 @@ export default {
   components: {LeaveSchool, Notice, AskForLeave},
   data() {
     return {
+      model:'',
       data:[],
       table:'',
       upload: false,
@@ -76,6 +87,7 @@ export default {
       sql = sql + ' from ' + this.table + ' a'
       let path='http://127.0.0.1:5001/get/data'
       axios.get(path, { params: { sql: sql } }).then(res => {
+        console.log(res.data.data)
         this.data=res.data.data
         if (this.name==='用户管理'){
           this.data = this.data.filter(data => data.username !== 'admin')

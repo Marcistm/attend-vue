@@ -1,10 +1,10 @@
 <template>
 <div>
-  <el-table :show-header="false" :data="data">
+  <el-table :show-header="false" :data="data" :span-method="span">
     <el-table-column prop="item1"></el-table-column>
     <el-table-column >
       <template slot-scope="scope">
-        <el-input v-if="scope.$index!==0" v-model="scope.row.item2"></el-input>
+        <el-input v-if="![0,1].includes(scope.$index)" v-model="scope.row.item2"></el-input>
         <span v-else>{{scope.row.item2}}</span>
       </template>
     </el-table-column>
@@ -18,13 +18,14 @@
 
 <script>
 import {getUserName} from "@/utils/auth";
+import axios from "axios";
 
 export default {
   name: "LeaveSchool",
   data(){
     return{
       data:[
-          {item1:'姓名',item2:'11',item3:'性别',item4:'',item5:'班级',item6:''},
+          {item1:'姓名',item2:'',item3:'性别',item4:'',item5:'班级',item6:''},
         {item1:'身份证号',item2:'',item5:'联系电话',item6:''},
         {item1:'监护人姓名',item2:'',item3:'',item4:'监护人电话',item5:'',item6:''},
         {item1:'去向地址',item2:'',item3:'',item4:'',item5:'',item6:''},
@@ -34,9 +35,23 @@ export default {
       ]
     }
   },
+  methods:{
+    span({row, column, rowIndex, columnIndex}){
+    }
+  },
   mounted() {
     this.data[0].item2=getUserName()
-    console.log(this.data)
+    let path='http://127.0.0.1:5001/student/info/get'
+    let params={
+      username:getUserName()
+    }
+    axios.get(path,{params:params}).then(res=>{
+      let data=res.data.data[0]
+      this.data[0].item4=data.sex
+      this.data[0].item6=data.class
+      this.data[1].item2=data.identity
+    })
+
   }
 }
 </script>

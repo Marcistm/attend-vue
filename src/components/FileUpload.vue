@@ -7,6 +7,7 @@
     :on-preview="previewFile"
     :on-change="handleChange"
     :on-remove="handleRemove"
+    :disabled="!disabled"
     show-file-list>
   <el-button type="primary">选取</el-button>
 </el-upload>
@@ -15,10 +16,11 @@
 import axios from "axios";
 
 export default {
-  name: "Upload",
+  name: "FileUpload",
   props:{
     original_id:String,
-    type:String
+    type:String,
+    disabled:Boolean
   },
   data(){
     return{
@@ -39,7 +41,6 @@ export default {
       }
       let path='http://127.0.0.1:5001/old_file/get'
       axios.get(path,{params:params}).then(res=>{
-        console.log(res.data)
        res.data.data.forEach(item=>{
          let fileObj = {
            uid: Math.random(),

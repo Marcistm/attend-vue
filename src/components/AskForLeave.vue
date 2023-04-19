@@ -20,8 +20,8 @@
     <el-table-column label="操作">
       <template slot-scope="scope">
         <el-button type="primary" @click="update_load(scope.row.id,'search')">查看详情</el-button>
-        <el-button type="success" v-if="scope.row.condition===0&scope.row.condition!==0" @click="update_load(scope.row.id,'update')" >修改</el-button>
-        <el-button type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+        <el-button type="success" v-if="scope.row.condition===0" @click="update_load(scope.row.id,'update')" >修改</el-button>
+        <el-button type="danger"  v-if="scope.row.condition===0" @click="handleDelete(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -34,10 +34,12 @@
       {{table.name}}
     </el-form-item>
     <el-form-item label="理由" prop="reason">
-      <el-input autosize v-model="table.reason"></el-input>
+      <el-input v-if="tag" autosize v-model="table.reason"></el-input>
+      <span v-else>{{table.reason}}</span>
     </el-form-item>
     <el-form-item label="请假日期" prop="date" >
       <el-date-picker
+          :disabled="!tag"
           v-model="table.date"
           :picker-options="pickerOptions"
           type="datetimerange"
@@ -47,11 +49,11 @@
       </el-date-picker>
     </el-form-item>
     <el-form-item label="附件">
-<Upload ref="files" type="请假" :original_id="id"></Upload>
+<file-upload ref="files" type="请假" :original_id="id" :disabled="tag"></file-upload>
     </el-form-item>
     <el-form-item>
       <el-button type="success" v-if="data.length===0" @click="submit">提交</el-button>
-      <el-button type="success" v-else @click="update">更新</el-button>
+      <el-button type="success" v-if="tag&data.length!==0" @click="update">更新</el-button>
     </el-form-item>
   </el-form>
 
@@ -72,10 +74,10 @@ function formatTime(timestamp) {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-import Upload from "@/components/Upload";
+import FileUpload from "@/components/FileUpload";
 export default {
   name: "AskForLeave",
-  components: {Upload},
+  components: {FileUpload},
   data(){
     return{
       pickerOptions: {
@@ -97,6 +99,7 @@ export default {
         reason:'',
       },
       data:[],
+      tag:false,
       fileList:[],
       rules: {
         reason: [
@@ -133,7 +136,12 @@ export default {
         }
       })
     },
-    update_load(id){
+    update_load(id,option){
+      if (option==='update'){
+        this.tag=true
+      }else {
+        this.tag=false
+      }
       let path='http://127.0.0.1:5001/ask_for_leave/preview'
       let parmas={
         id:id
@@ -194,6 +202,7 @@ export default {
       this.table.username=localStorage.getItem('username')
       this.table.name=localStorage.getItem('name')
       this.dialog=true
+      this.tag=true
     },
     submit() {
       if (this.data.length>0){
