@@ -78,6 +78,7 @@ export default {
     this.getData()
   },
   methods: {
+
     getData:function (){
       let t=this.$store.state.filter({name: this.name}, this.$store.state.tableData)[0]
       this.columns = t.column

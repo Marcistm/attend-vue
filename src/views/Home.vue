@@ -27,6 +27,7 @@ import Attend from "@/components/Attend";
 import HealthRecord from "@/components/HealthRecord";
 import HealthDeclaration from "@/components/HealthDeclaration";
 import AskForLeave from "@/components/AskForLeave";
+import {getUserName} from "@/utils/auth";
 
 export default {
   name: "Home",
@@ -39,11 +40,19 @@ export default {
   },methods:{
     change(name){
      this.name=name
-    }
+    },
+    getInfo(){
+     let username=getUserName()
+      let path='http://127.0.0.1:5001/info/get'
+
+    },
   },
   mounted() {
     let role=localStorage.getItem('permission')
     this.table=this.$store.state.filter({role:role},this.$store.state.table)[0].item
+    if (['0','1'].includes(role)){
+      this.getInfo()
+    }
   }
 }
 

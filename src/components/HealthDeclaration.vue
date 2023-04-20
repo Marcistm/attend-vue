@@ -1,17 +1,5 @@
 <template>
   <el-form :model="form" ref="form" label-width="100px">
-    <el-form-item label="学生姓名" prop="name">
-      {{form.name}}
-    </el-form-item>
-    <el-form-item label="学生学号" prop="id">
-      {{form.id}}
-    </el-form-item>
-    <el-form-item label="性别" prop="gender">
-      <el-radio-group v-model="form.gender">
-        <el-radio label="男">男</el-radio>
-        <el-radio label="女">女</el-radio>
-      </el-radio-group>
-    </el-form-item>
     <el-form-item label="体温度数" prop="temperature">
       <el-input-number v-model="form.temperature" :min="35" :max="42" :step="0.1"></el-input-number>
     </el-form-item>
