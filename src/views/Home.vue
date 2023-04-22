@@ -28,6 +28,7 @@ import HealthRecord from "@/components/HealthRecord";
 import HealthDeclaration from "@/components/HealthDeclaration";
 import AskForLeave from "@/components/AskForLeave";
 import {getUserName} from "@/utils/auth";
+import axios from "axios";
 
 export default {
   name: "Home",
@@ -43,14 +44,20 @@ export default {
     },
     getInfo(){
      let username=getUserName()
-      let path='http://127.0.0.1:5001/info/get'
+      let path='http://127.0.0.1:5001/student/info/get'
+      let parmas={
+       username:username
+      }
+      axios.get(path,{params:parmas}).then(res=>{
+        this.$store.state.stu_info=res.data.data[0]
+      })
 
     },
   },
   mounted() {
     let role=localStorage.getItem('permission')
     this.table=this.$store.state.filter({role:role},this.$store.state.table)[0].item
-    if (['0','1'].includes(role)){
+    if (role==='0'){
       this.getInfo()
     }
   }

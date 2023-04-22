@@ -46,9 +46,8 @@ const store = new Vuex.Store({
             {name:'申请审批',table:'ask_judge',column:[{label:'项目名称',name:'name'},{label: '发起人',name:'student'},{label:'发起时间',name:'time'}]},
             {name: '班级管理',table: 'class',column: [{label: 'id',name:'id'},{label: '班级',name:'class'},{label: '班主任',name:'username'}]}
         ],
-        data:[]
-
-
+        data:[],
+        stu_info:{}
     },
     actions:{
 
