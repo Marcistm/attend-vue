@@ -25,7 +25,8 @@
     <el-table-column prop="item6"></el-table-column>
   </el-table>
   <br>
-  <el-button type="primary" @click="submit">提交</el-button>
+  <el-button type="primary" v-if="id===''" @click="submit">提交</el-button>
+  <el-button type="success" v-else @click="update">更新</el-button>
 </div>
 </template>
 
@@ -35,6 +36,10 @@ import axios from "axios";
 
 export default {
   name: "LeaveSchool",
+  props:{
+    id:String,
+    see_data:Array
+  },
   data(){
     return{
       options:['高铁','飞机','自驾','公交'],
@@ -102,7 +107,7 @@ export default {
       let params={
         username:getUser(),
         type:'离校申请',
-        table:this.data
+        table:this.data,
       }
       axios.post(path,params).then(res=>{
         if (res.data.code===200){
@@ -110,20 +115,39 @@ export default {
           this.$store.state.dialog=false
         }
       })
+    },
+    update(){
+      let path='http://127.0.0.1:5001/process/update'
+      let params={
+        id:this.id,
+        table:this.data
+      }
+      axios.post(path,params).then(res=>{
+        if (res.data.code===200){
+          this.$message.success('更新成功')
+          this.$store.state.dialog=false
+        }
+      })
     }
   },
   mounted() {
-    this.data[0].item2=getUserName()
-    let path='http://127.0.0.1:5001/student/info/get'
-    let params={
-      username:getUserName()
+    if (this.see_data.length){
+      this.data=this.see_data
+    }else {
+      this.data[0].item2=getUserName()
+      let path='http://127.0.0.1:5001/student/info/get'
+      let params={
+        username:getUserName()
+      }
+      axios.get(path,{params:params}).then(res=>{
+        let data=res.data.data[0]
+        this.data[0].item4=data.sex
+        this.data[0].item6=data.class
+        this.data[1].item2=data.identity
+      })
     }
-    axios.get(path,{params:params}).then(res=>{
-      let data=res.data.data[0]
-      this.data[0].item4=data.sex
-      this.data[0].item6=data.class
-      this.data[1].item2=data.identity
-    })
+
+
 
   }
 }

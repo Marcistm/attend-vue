@@ -36,10 +36,10 @@ const store = new Vuex.Store({
             {role:2,item:[{name:'首页',id:'13'},{name:'通知管理',id:'15'},{name:'公告管理',id:'16'},{name:'用户管理',id:'17'},{name:'班级管理',id:'18'}]},
         ],
         tableData:[
-            {name:'离校申请',table:'leave_school',column:[{label:'发起时间',name:'time'},{label:'当前状态',name:'condition'}]},
+            {name:'离校申请',table:'process',column:[{label:'发起时间',name:'time',show:true},{label:'当前状态',name:'condition',show:true},{label:'类型',name:'type',show:false},{label:'id',name:'id',show:false}]},
             {name:'返校申请',table:'return_school',column:[{label:'发起时间',name:'time'},{label:'当前状态',name:'condition'}]},
-            {name:'请假',table:'ask_for_leave',column:[{label:'发起时间',name:'time'},{label:'当前状态',name:'condition'},{label:'id',name:'id'},{label:'理由',name:'reason'},{label:'开始时间',name:'start_time'},{label:'结束时间',name:'end_time'}]},
-            {name:'用户管理',table:'user_table',column:[{label:'id',name:'id'},{label:'用户名',name:'username'},{label:'姓名',name:'name'},{label:'身份',name:'privilege'}]},
+            {name:'请假',table:'ask_for_leave',column:[{label:'发起时间',name:'time',show:true},{label:'当前状态',name:'condition',show:true},{label:'id',name:'id',show:false},{label:'理由',name:'reason',show:true},{label:'开始时间',name:'start_time'},{label:'结束时间',name:'end_time'}]},
+            {name:'用户管理',table:'user_table',column:[{label:'id',name:'id',show:false},{label:'用户名',name:'username',show:true},{label:'姓名',name:'name',show:true},{label:'身份',name:'privilege',show:true}]},
             {name:'通知管理',table:'notice',column:[{label:'时间',name:'time'},{label:'内容',name:'text'}]},
             {name:'公告管理',table:'board',column:[{label:'时间',name:'time'},{label:'内容',name:'text'}]},
             {name:'审批项目管理',table:'item',column:[{label:'项目名称',name:'item'},{label:'使用状态',name:'condition'}]},

@@ -8,19 +8,20 @@
       </el-form-item>
     </el-form>
 <el-table :data="data">
-  <el-table-column v-if="i.name !== 'id'" :key="i.name" v-for="i in columns" :label="i.label" :prop="i.name"></el-table-column>
+  <el-table-column v-if="i.show" :key="i.name" v-for="i in columns" :label="i.label" :prop="i.name"></el-table-column>
   <el-table-column label="操作">
     <template slot-scope="scope">
-    <el-button v-if="name!=='请假'" @click="reset_password(scope.row.username)">密码重置</el-button>
+    <el-button v-if="name=='用户管理'" @click="reset_password(scope.row.username)">密码重置</el-button>
 <!--    <el-button>查看详情</el-button>-->
     <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
+      <el-button type="success" @click="see(scope.row.id)">查看详情</el-button>
     </template>
   </el-table-column>
 </el-table>
     <el-dialog :title="name" :visible.sync="$store.state.dialog">
       <AskForLeave v-if="name==='请假'"></AskForLeave>
       <notice v-if="name==='通知管理'"></notice>
-      <leave-school v-if="name==='离校申请'"></leave-school>
+      <leave-school v-if="name==='离校申请'" :see_data="see_data" :id="id"></leave-school>
     </el-dialog>
     <el-dialog :visible.sync="upload">
       <el-form :inline="true">
@@ -50,6 +51,21 @@
 import AskForLeave from "@/components/AskForLeave";
 import * as XLSX from "xlsx";
 const Excel = require('exceljs');
+function containsField(dictArray, fieldName) {
+  return dictArray.some(function(dict) {
+    return fieldName in dict;
+  });
+}
+function formatTime(timestamp) {
+  const date = new Date(timestamp);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours() + 16).padStart(2, "0"); // add 8 hours for Shanghai time
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
 import axios from "axios";
 import Notice from "@/components/Notice";
 import LeaveSchool from "@/components/LeaveSchool";
@@ -64,6 +80,8 @@ export default {
       upload: false,
       columns: [],
       tableData: [],
+      see_data:[],
+      id:''
     }
   },
   props: {
@@ -88,8 +106,19 @@ export default {
       sql = sql + ' from ' + this.table + ' a'
       let path='http://127.0.0.1:5001/get/data'
       axios.get(path, { params: { sql: sql } }).then(res => {
-        console.log(res.data.data)
         this.data=res.data.data
+        if (containsField(this.data,'condition')){
+          this.data.forEach(item=>{
+            if (item['condition']===0){
+              item['condition']='审核中'
+            }
+          })
+        }
+            if (containsField(this.data,'time')){
+              this.data.forEach(item=>{
+                item['time']=formatTime(item['time'])
+              })
+            }
         if (this.name==='用户管理'){
           this.data = this.data.filter(data => data.username !== 'admin')
           this.data.forEach(item=>{
@@ -100,6 +129,9 @@ export default {
               item['privilege']='老师'
             }
           })
+        }
+        if (this.name==='离校申请'){
+          this.data=this.$store.state.filter({type:'离校申请'},this.data)
         }
       })
 
@@ -187,6 +219,15 @@ export default {
             showClose: true
           })
         }
+      })
+    },
+    see(id){
+      let path = 'http://127.0.0.1:5001/see'
+      let params = {id: id}
+      axios.get(path,{params:params}).then(res=>{
+        this.see_data=res.data.data
+        this.id=id
+        this.$store.state.dialog = true
       })
     },
     del(id) {
