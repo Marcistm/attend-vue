@@ -113,6 +113,7 @@ export default {
         if (res.data.code===200){
           this.$message.success('提交成功')
           this.$store.state.dialog=false
+          this.$emit('search');
         }
       })
     },
@@ -126,6 +127,7 @@ export default {
         if (res.data.code===200){
           this.$message.success('更新成功')
           this.$store.state.dialog=false
+          this.$emit('search');
         }
       })
     }
@@ -146,9 +148,6 @@ export default {
         this.data[1].item2=data.identity
       })
     }
-
-
-
   }
 }
 </script>

@@ -12,7 +12,6 @@
   <el-table-column label="操作">
     <template slot-scope="scope">
     <el-button v-if="name=='用户管理'" @click="reset_password(scope.row.username)">密码重置</el-button>
-<!--    <el-button>查看详情</el-button>-->
     <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
       <el-button type="success" @click="see(scope.row.id)">查看详情</el-button>
     </template>
@@ -21,7 +20,8 @@
     <el-dialog :title="name" :visible.sync="$store.state.dialog">
       <AskForLeave v-if="name==='请假'"></AskForLeave>
       <notice v-if="name==='通知管理'"></notice>
-      <leave-school v-if="name==='离校申请'" :see_data="see_data" :id="id"></leave-school>
+      <leave-school v-if="name==='离校申请'" :see_data="see_data" :id="id" @search="getData"></leave-school>
+      <return-school v-if="name==='返校申请'" :see_data="see_data" :id="id" @search="getData"></return-school>
     </el-dialog>
     <el-dialog :visible.sync="upload">
       <el-form :inline="true">
@@ -69,9 +69,10 @@ function formatTime(timestamp) {
 import axios from "axios";
 import Notice from "@/components/Notice";
 import LeaveSchool from "@/components/LeaveSchool";
+import ReturnSchool from "@/components/ReturnSchool";
 export default {
   name: "DataTable",
-  components: {LeaveSchool, Notice, AskForLeave},
+  components: {ReturnSchool, LeaveSchool, Notice, AskForLeave},
   data() {
     return {
       model:'',
@@ -225,9 +226,11 @@ export default {
       let path = 'http://127.0.0.1:5001/see'
       let params = {id: id}
       axios.get(path,{params:params}).then(res=>{
-        this.see_data=res.data.data
-        this.id=id
-        this.$store.state.dialog = true
+        if (res.data.data.length){
+          this.see_data=res.data.data
+          this.id=id
+          this.$store.state.dialog = true
+        }
       })
     },
     del(id) {
@@ -245,17 +248,13 @@ export default {
               message: '删除成功',
               showClose: true
             })
+            this.getData()
           }
         })
-        this.reloadData()
       }).catch(() => {
         // 用户取消删除操作
       })
     },
-    reloadData() {
-      let name = this.name
-      this.$store.dispatch('getData', {name})
-    }
 
   }
 }
