@@ -50,6 +50,9 @@ export default {
       }
       axios.get(path,{params:parmas}).then(res=>{
         this.$store.state.stu_info=res.data.data[0]
+        if (this.$store.state.stu_info.tag==false){
+          this.$message.info('今日健康申报未填写')
+        }
       })
 
     },
