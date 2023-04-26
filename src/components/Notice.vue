@@ -1,5 +1,5 @@
 <template>
-<el-form>
+<el-form style="width:60%">
   <el-form-item  label="班级">
     <el-select>
     </el-select>
@@ -11,7 +11,7 @@
     <file-upload ref="notice_files" type="通知" :original_id="id" :disabled="tag"></file-upload>
   </el-form-item>
   <el-form-item>
-    <el-button @click="submit">提交</el-button>
+    <el-button type="primary" @click="submit">提交</el-button>
   </el-form-item>
 </el-form>
 </template>
@@ -24,7 +24,7 @@ export default {
   data(){
     return{
       id:'',
-      tag:false,
+      tag:true,
       text:''
     }
   }

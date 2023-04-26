@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div v-if="$store.state.stu_info.tag" >
       <div >今日健康申报已填写</div>
     </div>
@@ -29,7 +28,6 @@
 
     </el-form>
   </div>
-
 </template>
 
 <script>
