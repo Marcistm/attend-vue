@@ -2,7 +2,12 @@
   <el-container>
 
       <el-aside width="200px" >
-        <el-menu>
+        <el-menu
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b"
+        >
+          <h3>学生出勤管理系统</h3>
         <el-menu-item  v-for="i in table" :key="i.id" :lable="i.name" @click="change(i.name)">
           {{i.name}}
         </el-menu-item>
@@ -44,7 +49,7 @@ export default {
     },
     getInfo(){
      let username=getUserName()
-      let path='http://127.0.0.1:5001/student/info/get'
+      let path='http://43.143.116.236:5001/student/info/get'
       let parmas={
        username:username
       }
@@ -69,5 +74,19 @@ export default {
 </script>
 
 <style scoped>
+
+.el-menu {
+  height: 100%;
+  border: none;}
+
+h3 {
+  color: #ffffff;
+  text-align: center;
+  line-height: 48px;
+}
+
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+  min-height: 400px;}
 
 </style>

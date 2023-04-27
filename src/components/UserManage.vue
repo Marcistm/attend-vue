@@ -4,7 +4,7 @@
     <el-form-item><el-button type="primary" @click="download">下载模板</el-button></el-form-item>
     <el-form-item>
       <el-upload
-          action="http://127.0.0.1:5001/upload/data"
+          action="http://43.143.116.236:5001/upload/data"
           :show-file-list="false"
           :on-success="handleSuccess"
           :before-upload="beforeUpload">

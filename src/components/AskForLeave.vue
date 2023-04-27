@@ -113,7 +113,7 @@ export default {
   },
   methods:{
     update(){
-      let path='http://127.0.0.1:5001/ask_for_leave/update' // update path
+      let path='http://43.143.116.236:5001/ask_for_leave/update' // update path
       const formData = new FormData();
       formData.append('id',this.id)
       formData.append('reason',this.table.reason)
@@ -142,7 +142,7 @@ export default {
       }else {
         this.tag=false
       }
-      let path='http://127.0.0.1:5001/ask_for_leave/preview'
+      let path='http://43.143.116.236:5001/ask_for_leave/preview'
       let parmas={
         id:id
       }
@@ -172,7 +172,7 @@ export default {
         type: 'warning'
       }).then(() => {
         // 用户点击确定按钮，继续执行删除操作
-        let path='http://127.0.0.1:5001/ask_for_leave/delete'
+        let path='http://43.143.116.236:5001/ask_for_leave/delete'
         let parmas={
           id:id
         }
@@ -220,7 +220,7 @@ export default {
           formData.append('reason',this.table.reason)
           formData.append('start_time',formatTime(this.table.date[0]))
           formData.append('end_time',formatTime(this.table.date[1]))
-          axios.post('http://127.0.0.1:5001/ask_for_leave/add', formData)
+          axios.post('http://43.143.116.236:5001/ask_for_leave/add', formData)
               .then((res) => {
                 if (res.data.code===200){
                   this.$message.success('提交成功')

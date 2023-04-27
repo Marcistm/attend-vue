@@ -101,7 +101,7 @@ export default {
 
     },
     submit(){
-      let path='http://127.0.0.1:5001/process/submit'
+      let path='http://43.143.116.236:5001/process/submit'
       let params={
         username:getUser(),
         type:'返校申请',
@@ -116,7 +116,7 @@ export default {
       })
     },
     update(){
-      let path='http://127.0.0.1:5001/process/update'
+      let path='http://43.143.116.236:5001/process/update'
       let params={
         id:this.id,
         table:this.data
@@ -135,7 +135,7 @@ export default {
       this.data=this.see_data
     }else {
       this.data[0].item2=getUserName()
-      let path='http://127.0.0.1:5001/student/info/get'
+      let path='http://43.143.116.236:5001/student/info/get'
       let params={
         username:getUserName()
       }

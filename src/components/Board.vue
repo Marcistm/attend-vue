@@ -1,10 +1,65 @@
 <template>
-
+  <el-form style="width:60%" :model="form">
+    <el-form-item  label="标题">
+      <el-input v-model="form.title"></el-input>
+    </el-form-item>
+    <el-form-item label="内容">
+      <el-input autosize v-model="form.text"></el-input>
+    </el-form-item>
+    <el-form-item>
+      <file-upload ref="board_files" type="公告" :original_id="id" :disabled="tag"></file-upload>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="submit">提交</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 
 <script>
+import axios from "axios";
+import FileUpload from "@/components/FileUpload";
+import {getUserName} from "@/utils/auth";
 export default {
-  name: "Board"
+  name: "Board",
+  components: {FileUpload},
+  props:{
+    id:String,
+    see_data:Array
+  },
+  data(){
+    return{
+      form:{
+        title:'',
+        text:'',
+        author:getUserName()
+      },
+      tag:false,
+    }
+  },
+  methods:{
+    submit(){
+      let path='http://43.143.116.236:5001/board/submit'
+      const formData = new FormData();
+      for (const key in this.form) {
+        formData.append(key, this.form[key]);
+      }
+      this.$refs.board_files.fileList.forEach(file => {
+        formData.append(`board_file`, file.raw)
+      })
+      axios.post(path,formData).then(res=>{
+        if (res.data.code===200){
+          this.$message.success('操作成功')
+          this.$store.state.dialog=false
+          this.$emit('search');
+        }
+      })
+    }
+  },
+  mounted() {
+    if (this.see_data.length){
+      this.form=this.see_data[0]
+    }
+  }
 }
 </script>
 

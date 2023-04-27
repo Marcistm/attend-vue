@@ -13,13 +13,14 @@
     <template slot-scope="scope">
     <el-button v-if="name=='用户管理'" type="primary" @click="reset_password(scope.row.username)">密码重置</el-button>
     <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
-      <el-button v-if="name!=='用户管理'" type="success" @click="see(scope.row.id)">查看详情</el-button>
+      <el-button v-if="name!=='用户管理'" type="success" @click="see(scope.row.id,table)">查看详情</el-button>
     </template>
   </el-table-column>
 </el-table>
     <el-dialog :title="name" :visible.sync="$store.state.dialog">
+      <board v-if="name==='公告管理'" :see_data="see_data" :id="id" @search="getData"></board>
       <AskForLeave v-if="name==='请假'"></AskForLeave>
-      <notice v-if="name==='通知管理'"></notice>
+      <notice v-if="['通知管理','我的通知'].includes(name)" :see_data="see_data" :id="id" @search="getData"></notice>
       <leave-school v-if="name==='离校申请'" :see_data="see_data" :id="id" @search="getData"></leave-school>
       <return-school v-if="name==='返校申请'" :see_data="see_data" :id="id" @search="getData"></return-school>
       <user-manage v-if="name==='用户管理'" @search="getData"></user-manage>
@@ -29,8 +30,6 @@
 
 <script>
 import AskForLeave from "@/components/AskForLeave";
-import * as XLSX from "xlsx";
-const Excel = require('exceljs');
 function containsField(dictArray, fieldName) {
   return dictArray.some(function(dict) {
     return fieldName in dict;
@@ -41,7 +40,7 @@ function formatTime(timestamp) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  const hours = String(date.getHours() + 16).padStart(2, "0"); // add 8 hours for Shanghai time
+  const hours = String(date.getHours() + 16).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
   const seconds = String(date.getSeconds()).padStart(2, "0");
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
@@ -51,9 +50,10 @@ import Notice from "@/components/Notice";
 import LeaveSchool from "@/components/LeaveSchool";
 import ReturnSchool from "@/components/ReturnSchool";
 import UserManage from "@/components/UserManage";
+import Board from "@/components/Board";
 export default {
   name: "DataTable",
-  components: {UserManage, ReturnSchool, LeaveSchool, Notice, AskForLeave},
+  components: {Board, UserManage, ReturnSchool, LeaveSchool, Notice, AskForLeave},
   data() {
     return {
       model:'',
@@ -86,7 +86,7 @@ export default {
       let sql = 'select a.'
       sql = sql + this.columns.map(function (t) { return t.name; }).join(',a.');
       sql = sql + ' from ' + this.table + ' a'
-      let path='http://127.0.0.1:5001/get/data'
+      let path='http://43.143.116.236:5001/get/data'
       axios.get(path, { params: { sql: sql } }).then(res => {
         this.data=res.data.data
         if (containsField(this.data,'condition')){
@@ -115,6 +115,9 @@ export default {
         if (this.name==='离校申请'){
           this.data=this.$store.state.filter({type:'离校申请'},this.data)
         }
+        if (this.name==='我的通知'){
+          console.log(1)
+        }
       })
 
     },
@@ -139,12 +142,13 @@ export default {
         }
       })
     },
-    see(id){
-      let path = 'http://127.0.0.1:5001/see'
-      let params = {id: id}
+    see(id,table){
+      let path = 'http://43.143.116.236:5001/see'
+      let params = {id: id,table:table}
       axios.get(path,{params:params}).then(res=>{
         if (res.data.data.length){
           this.see_data=res.data.data
+          console.log(this.see_data)
           this.id=id
           this.$store.state.dialog = true
         }
@@ -156,7 +160,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        let path = 'http://127.0.0.1:5001/delete'
+        let path = 'http://43.143.116.236:5001/delete'
         let params = {id: id, table: this.table}
         axios.get(path, {params: params}).then(res => {
           if (res.data.code === 200) {

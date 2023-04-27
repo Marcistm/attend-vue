@@ -9,7 +9,7 @@
     :on-remove="handleRemove"
     :disabled="!disabled"
     show-file-list>
-  <el-button type="primary">选取</el-button>
+  <el-button type="primary">选取附件</el-button>
 </el-upload>
 </template>
 <script>
@@ -39,7 +39,7 @@ export default {
         original_id:this.original_id,
         type:this.type
       }
-      let path='http://127.0.0.1:5001/old_file/get'
+      let path='http://43.143.116.236:5001/old_file/get'
       axios.get(path,{params:params}).then(res=>{
        res.data.data.forEach(item=>{
          let fileObj = {

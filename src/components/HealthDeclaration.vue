@@ -60,7 +60,7 @@ export default {
       });
     },
     submit(){
-      let path = 'http://127.0.0.1:5001/stu/submit' //本地端口
+      let path = 'http://43.143.116.236:5001/stu/submit' //本地端口
       axios.get(path, {params:this.form})
           .then((response) => {
             // 请求成功处理
