@@ -13,7 +13,8 @@
     <template slot-scope="scope">
     <el-button v-if="name=='用户管理'" type="primary" @click="reset_password(scope.row.username)">密码重置</el-button>
     <el-button type="danger" @click="del(scope.row.id)">删除</el-button>
-      <el-button v-if="name!=='用户管理'" type="success" @click="see(scope.row.id,table)">查看详情</el-button>
+      <el-button v-if="!['用户管理','考勤管理'].includes(name)" type="success" @click="see(scope.row.id,table)">查看详情</el-button>
+      <el-button v-if="name==='考勤管理'" type="primary" @click="attend(scope.row.class,scope.row.course)">发起考勤</el-button>
     </template>
   </el-table-column>
 </el-table>
@@ -24,6 +25,11 @@
       <leave-school v-if="name==='离校申请'" :see_data="see_data" :id="id" @search="getData"></leave-school>
       <return-school v-if="name==='返校申请'" :see_data="see_data" :id="id" @search="getData"></return-school>
       <user-manage v-if="name==='用户管理'" @search="getData"></user-manage>
+      <class-manage v-if="name==='班级管理'" @search="getData" :see_data="see_data" :id="id"></class-manage>
+      <attend-board v-if="name==='考勤管理'" @search="getData"></attend-board>
+    </el-dialog>
+    <el-dialog :visible.sync="attend_tag">
+      <attend :class_name="this.class" :course="course"></attend>
     </el-dialog>
   </div>
 </template>
@@ -51,11 +57,16 @@ import LeaveSchool from "@/components/LeaveSchool";
 import ReturnSchool from "@/components/ReturnSchool";
 import UserManage from "@/components/UserManage";
 import Board from "@/components/Board";
+import ClassManage from "@/components/ClassManage";
+import AttendBoard from "@/components/AttendBoard";
+import Excel from "exceljs";
+import Attend from "@/components/Attend";
 export default {
   name: "DataTable",
-  components: {Board, UserManage, ReturnSchool, LeaveSchool, Notice, AskForLeave},
+  components: {Attend, AttendBoard, ClassManage, Board, UserManage, ReturnSchool, LeaveSchool, Notice, AskForLeave},
   data() {
     return {
+      attend_tag:false,
       model:'',
       data:[],
       table:'',
@@ -63,7 +74,9 @@ export default {
       columns: [],
       tableData: [],
       see_data:[],
-      id:''
+      id:'',
+      class:'',
+      course:''
     }
   },
   props: {
@@ -78,7 +91,11 @@ export default {
     this.getData()
   },
   methods: {
-
+    attend(class_name,course){
+      this.class=class_name
+      this.course=course
+      this.attend_tag=true
+    },
     getData:function (){
       let t=this.$store.state.filter({name: this.name}, this.$store.state.tableData)[0]
       this.columns = t.column

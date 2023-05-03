@@ -1,7 +1,7 @@
 <template>
 <el-form style="width:60%" :model="form">
-  <el-form-item  label="班级">
-    <el-select v-model="form.class">
+  <el-form-item v-if="this.role==='1'" label="课程">
+    <el-select  v-model="form.course">
     </el-select>
   </el-form-item>
   <el-form-item label="通知内容">
@@ -30,6 +30,7 @@ export default {
   data(){
     return{
       tag:true,
+      role:'',
       form:{
         class:'',
         text:'',
@@ -56,6 +57,7 @@ export default {
     }
   },
   mounted() {
+    this.role=localStorage.getItem('permission')
     if (this.see_data.length){
       this.form=this.see_data[0]
     }

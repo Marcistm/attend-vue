@@ -2,14 +2,10 @@
   <div>
 <el-form :inline="true">
   <el-form-item label="班级">
-    <el-select value="">
-      <el-option value=""></el-option>
-    </el-select>
+    <span>{{formInLine.class}}</span>
   </el-form-item>
   <el-form-item label="课程">
-    <el-select value="">
-      <el-option value=""></el-option>
-    </el-select>
+    <span>{{formInLine.course}}</span>
   </el-form-item>
   <el-form-item label="时间(分钟)">
     <el-select  v-model="formInLine.time" placeholder="请选择"  >
@@ -39,6 +35,8 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+
 function formatTime(ms) {
   const minutes = Math.floor(ms / 60000);
   const seconds = ((ms % 60000) / 1000).toFixed(0);
@@ -48,8 +46,13 @@ function formatTime(ms) {
 export default {
 
   name: "Attend",
+  props:{
+    class_name:String,
+    course:String
+  },
   data(){
     return{
+      id:'',
       time:'',
       counter: "0000", // 初始值为四个零
       intervalId: null,
@@ -79,11 +82,24 @@ export default {
       this.formInLine.time=''
       const randomNum = Math.floor(Math.random() * 10000); // 生成随机的四位数字
       this.counter = randomNum.toString().padStart(4, "0"); // 补零操作，保证显示的数字总共有四位数
+      let path1='http://127.0.0.1:5001/attend/insert'
+      axios.get(path1,{params:this.formInLine}).then(res=>{
+        if (res.data.code===200){
+          this.$message.success('考勤开始成功')
+          this.id=res.data.id
+        }
+      })
       this.intervalId = setInterval(() => {
         const randomNum = Math.floor(Math.random() * 10000); // 生成随机的四位数字
         this.counter = randomNum.toString().padStart(4, "0"); // 补零操作，保证显示的数字总共有四位数
         time=time-2000;
         this.time=formatTime(time)
+        let path=`http://127.0.0.1:5001/attend/start`
+        let parmas={
+          code:this.counter,
+          id:this.id
+        }
+        axios.get(path,{params:parmas})
         if (time === 0) {
           clearInterval(this.intervalId); // 关闭定时器
         }
@@ -93,6 +109,10 @@ export default {
     },
   destroyed() {
     clearInterval(this.intervalId); // 防止组件销毁时定时器仍在运行
+  },
+  mounted() {
+    this.formInLine.class=this.class_name
+    this.formInLine.course=this.course
   }
 
 }
