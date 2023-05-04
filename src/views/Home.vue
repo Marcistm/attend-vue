@@ -20,6 +20,7 @@
         <HealthDeclaration v-if="name==='每日健康申报'"></HealthDeclaration>
         <AskForLeave v-if="'请假'===name"></AskForLeave>
         <attend-statistics v-if="name==='考勤统计'"></attend-statistics>
+        <student-attend v-if="name==='上课签到'"></student-attend>
       </el-main>
 
   </el-container>
@@ -36,10 +37,13 @@ import {getUserName} from "@/utils/auth";
 import axios from "axios";
 import AttendStatistics from "@/components/AttendStatistics";
 import AttendBoard from "@/components/AttendBoard";
+import StudentAttend from "@/components/StudentAttend";
 
 export default {
   name: "Home",
-  components: {AttendBoard, AttendStatistics, AskForLeave, HealthRecord, Attend, DataTable,Index,HealthDeclaration},
+  components: {
+    StudentAttend,
+    AttendBoard, AttendStatistics, AskForLeave, HealthRecord, Attend, DataTable,Index,HealthDeclaration},
   data(){
     return{
       table:[],
