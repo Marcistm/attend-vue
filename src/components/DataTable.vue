@@ -165,7 +165,6 @@ export default {
       axios.get(path,{params:params}).then(res=>{
         if (res.data.data.length){
           this.see_data=res.data.data
-          console.log(this.see_data)
           this.id=id
           this.$store.state.dialog = true
         }

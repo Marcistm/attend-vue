@@ -1,15 +1,17 @@
 <template>
   <el-form style="width:60%" :model="form">
     <el-form-item  label="标题">
-      <el-input v-model="form.title"></el-input>
+      <el-input v-if="tag" v-model="form.title"></el-input>
+      <span v-else>{{form.title}}</span>
     </el-form-item>
     <el-form-item label="内容">
-      <el-input autosize v-model="form.text"></el-input>
+      <el-input v-if="tag" autosize v-model="form.text"></el-input>
+      <span v-else>{{form.text}}</span>
     </el-form-item>
     <el-form-item>
       <file-upload ref="board_files" type="公告" :original_id="id" :disabled="tag"></file-upload>
     </el-form-item>
-    <el-form-item>
+    <el-form-item v-show="tag">
       <el-button type="primary" @click="submit">提交</el-button>
     </el-form-item>
   </el-form>
@@ -23,8 +25,16 @@ export default {
   name: "Board",
   components: {FileUpload},
   props:{
-    id:String,
+    id:Number,
     see_data:Array
+  },
+  watch: {
+    see_data: {
+      handler: function(newVal) {
+        this.form=newVal[0]
+      },
+      deep: true
+    }
   },
   data(){
     return{
@@ -33,7 +43,7 @@ export default {
         text:'',
         author:getUserName()
       },
-      tag:false,
+      tag:true,
     }
   },
   methods:{
@@ -57,6 +67,7 @@ export default {
   },
   mounted() {
     if (this.see_data.length){
+      this.tag=false
       this.form=this.see_data[0]
     }
   }

@@ -9,7 +9,7 @@
     :on-remove="handleRemove"
     :disabled="!disabled"
     show-file-list>
-  <el-button type="primary">选取附件</el-button>
+  <el-button type="primary">{{text}}</el-button>
 </el-upload>
 </template>
 <script>
@@ -18,16 +18,30 @@ import axios from "axios";
 export default {
   name: "FileUpload",
   props:{
-    original_id:String,
+    original_id:Number,
     type:String,
     disabled:Boolean
   },
   data(){
     return{
+      text:'',
       fileList:[],
       file_path:''
     }
-  },methods:{
+  },
+  watch: {
+    disabled: {
+      handler: function(newVal) {
+        if (newVal===false){
+          this.text='文件列表'
+        }else {
+          this.text='选取附件'
+        }
+      },
+      deep: true
+    }
+  },
+  methods:{
     handleRemove(file, fileList) {
       this.fileList=fileList
     },
@@ -36,7 +50,7 @@ export default {
     },
     get_old_file(){
       let params={
-        original_id:this.original_id,
+        original_id:this.original_id.toString(),
         type:this.type
       }
       let path='http://43.143.116.236:5001/old_file/get'
@@ -61,6 +75,11 @@ export default {
     },
   },
   mounted() {
+    if (this.disabled===false){
+      this.text='文件列表'
+    }else {
+      this.text='选取附件'
+    }
     this.get_old_file()
   }
 }
