@@ -39,7 +39,7 @@ export default {
         }
       },
       deep: true
-    }
+    },
   },
   methods:{
     handleRemove(file, fileList) {

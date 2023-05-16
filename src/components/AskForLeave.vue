@@ -26,7 +26,7 @@
     </el-table-column>
   </el-table>
 <el-dialog :visible.sync="dialog" >
-  <el-form  :model="table" :rules="rules" ref="table">
+  <el-form  :model="table" :rules="rules" ref="table" style="width: 60%">
     <el-form-item label="学号" >
       {{table.username}}
     </el-form-item>

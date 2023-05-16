@@ -23,9 +23,9 @@
                 </el-form>
             </div>
         </div>
-       
+
     </div>
-   
+
 </template>
 
 <script>
@@ -63,10 +63,9 @@ export default {
             }
         }
     },
-    methods:{
+  methods:{
         submitForm(formName){
             this.$refs[formName].validate((valid) => {
-              console.log(this.$store.state.privilege, this.$store.state.username)
                 if (valid) {
                     this.loading = true
                     this.login()
@@ -84,9 +83,18 @@ export default {
           }
           axios.put(path, value).then(responses => {
             if (responses.data.code === 200) {
-              this.$router.push({
-                path: this.$route.query.redirect || '/home'
-              })
+              let role=localStorage.getItem('permission')
+              console.log(role==='0')
+              if(role==='0'){
+                this.$router.push({
+                  path: this.$route.query.redirect || '/info'
+                })
+              }else {
+                this.$router.push({
+                  path: this.$route.query.redirect || '/home'
+                })
+              }
+
             } else {
               this.loading = false
               this.$message.error(responses.data.msg)

@@ -21,6 +21,7 @@
         <AskForLeave v-if="'请假'===name"></AskForLeave>
         <attend-statistics v-if="name==='考勤统计'"></attend-statistics>
         <student-attend v-if="name==='上课签到'"></student-attend>
+        <my-notice v-if="name==='我的通知'"></my-notice>
       </el-main>
 
   </el-container>
@@ -38,10 +39,12 @@ import axios from "axios";
 import AttendStatistics from "@/components/AttendStatistics";
 import AttendBoard from "@/components/AttendBoard";
 import StudentAttend from "@/components/StudentAttend";
+import MyNotice from "@/components/MyNotice";
 
 export default {
   name: "Home",
   components: {
+    MyNotice,
     StudentAttend,
     AttendBoard, AttendStatistics, AskForLeave, HealthRecord, Attend, DataTable,Index,HealthDeclaration},
   data(){

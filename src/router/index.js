@@ -27,6 +27,11 @@ export const constRouter = [
     component: () => import('../views/resetPass.vue'),
     hidden: true //导航菜单忽略选项
   },
+  {
+    path: '/info',
+    component: () => import('../components/StudentInfo.vue'),
+    hidden: true //导航菜单忽略选项
+  },
 ]
 
 const router = new VueRouter({
