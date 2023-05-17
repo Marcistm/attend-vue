@@ -1,31 +1,5 @@
 <template>
   <div>
-    <el-form>
-      <el-form-item>
-        <el-button type="primary" @click="open">新增</el-button>
-      </el-form-item>
-    </el-form>
-  <el-table :data="data">
-    <el-table-column label="发起时间" prop="time"></el-table-column>
-    <el-table-column label="理由" prop="reason"></el-table-column>
-    <el-table-column label="开始时间" prop="start_time"></el-table-column>
-    <el-table-column label="结束时间" prop="end_time"></el-table-column>
-<el-table-column label="状态">
-  <template slot-scope="scope">
-    <span v-if="scope.row.condition===0">审核中</span>
-    <span v-if="scope.row.condition===-1">拒绝</span>
-    <span v-if="scope.row.condition===1">通过</span>
-  </template>
-</el-table-column>
-    <el-table-column label="操作">
-      <template slot-scope="scope">
-        <el-button type="primary" @click="update_load(scope.row.id,'search')">查看详情</el-button>
-        <el-button type="success" v-if="scope.row.condition===0" @click="update_load(scope.row.id,'update')" >修改</el-button>
-        <el-button type="danger"  v-if="scope.row.condition===0" @click="handleDelete(scope.row.id)">删除</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-<el-dialog :visible.sync="dialog" >
   <el-form  :model="table" :rules="rules" ref="table" style="width: 60%">
     <el-form-item label="学号" >
       {{table.username}}
@@ -56,8 +30,6 @@
       <el-button type="success" v-if="tag&data.length!==0" @click="update">更新</el-button>
     </el-form-item>
   </el-form>
-
-</el-dialog>
   </div>
 </template>
 <script>
@@ -78,6 +50,11 @@ import FileUpload from "@/components/FileUpload";
 export default {
   name: "AskForLeave",
   components: {FileUpload},
+  props:{
+    id:Number,
+    see_data:Array
+  },
+
   data(){
     return{
       pickerOptions: {
@@ -252,6 +229,12 @@ export default {
         item['time'] = formatTime(item['time']);
         item['end_time'] = formatTime(item['end_time']);
       });
+    },
+    see_data: {
+      handler: function(newVal) {
+        this.table=newVal[0]
+      },
+      deep: true
     }
   },
 

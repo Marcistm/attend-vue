@@ -36,7 +36,6 @@ import axios from "axios";
 export default {
   name: "ReturnSchool",
   props:{
-    id:String,
     see_data:Array
   },
   data(){

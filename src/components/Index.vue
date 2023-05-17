@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-carousel height="400px" :interval="5000" arrow="always">
+    <el-carousel height="500px" :interval="5000" arrow="always">
       <el-carousel-item v-for="(item, index) in carouselItems" :key="index">
         <el-image :src="item.image" alt="carousel-item" fit="fit" />
       </el-carousel-item>

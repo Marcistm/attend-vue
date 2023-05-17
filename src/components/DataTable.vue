@@ -19,10 +19,10 @@
 </el-table>
     <el-dialog :title="name" :visible.sync="$store.state.dialog">
       <board v-if="name==='公告管理'" :see_data="see_data" :id="id" @search="getData"></board>
-      <AskForLeave v-if="name==='请假'"></AskForLeave>
+      <AskForLeave v-if="name==='请假'" :see_data="see_data" :id="id" @search="getData"></AskForLeave>
       <notice v-if="['通知管理','我的通知'].includes(name)" :see_data="see_data" :id="id" @search="getData"></notice>
-      <leave-school v-if="name==='离校申请'" :see_data="see_data" :id="id" @search="getData"></leave-school>
-      <return-school v-if="name==='返校申请'" :see_data="see_data" :id="id" @search="getData"></return-school>
+      <leave-school v-if="name==='离校申请'" :see_data="see_data"  @search="getData"></leave-school>
+      <return-school v-if="name==='返校申请'" :see_data="see_data"  @search="getData"></return-school>
       <user-manage v-if="name==='用户管理'" @search="getData"></user-manage>
       <class-manage v-if="name==='班级管理'" @search="getData" :see_data="see_data" :id="id"></class-manage>
       <attend-board v-if="name==='考勤管理'" @search="getData"></attend-board>
@@ -105,10 +105,17 @@ export default {
       let path='http://43.143.116.236:5001/get/data'
       axios.get(path, { params: { sql: sql } }).then(res => {
         this.data=res.data.data
+        console.log(this.data)
         if (containsField(this.data,'condition')){
           this.data.forEach(item=>{
             if (item['condition']===0){
               item['condition']='审核中'
+            }
+            if (item['condition']===1){
+              item['condition']='已通过'
+            }
+            if (item['condition']===-1){
+              item['condition']='已打回'
             }
           })
         }
@@ -131,9 +138,10 @@ export default {
         if (this.name==='离校申请'){
           this.data=this.$store.state.filter({type:'离校申请'},this.data)
         }
-        if (this.name==='我的通知'){
-          console.log(1)
+        if (this.name==='返校申请'){
+          this.data=this.$store.state.filter({type:'返校申请'},this.data)
         }
+
       })
 
     },
@@ -159,11 +167,12 @@ export default {
       })
     },
     see(id,table){
-      let path = 'http://43.143.116.236:5001/see'
+      let path = 'http://127.0.0.1:5001/see'
       let params = {id: id,table:table}
       axios.get(path,{params:params}).then(res=>{
         if (res.data.data.length){
           this.see_data=res.data.data
+          console.log(this.see_data)
           this.id=id
           this.$store.state.dialog = true
         }

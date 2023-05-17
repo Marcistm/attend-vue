@@ -15,13 +15,13 @@
       </el-aside>
       <el-main>
         <Index v-if="name==='首页'||name===''"></Index>
-        <DataTable v-if="['用户管理','通知管理','公告管理','离校申请','返校申请','班级管理','考勤管理'].includes(name)" :name="name"></DataTable>
+        <DataTable v-if="['用户管理','通知管理','公告管理','离校申请','返校申请','班级管理','考勤管理','请假'].includes(name)" :name="name"></DataTable>
         <HealthRecord v-if="name==='健康档案'"></HealthRecord>
         <HealthDeclaration v-if="name==='每日健康申报'"></HealthDeclaration>
-        <AskForLeave v-if="'请假'===name"></AskForLeave>
         <attend-statistics v-if="name==='考勤统计'"></attend-statistics>
         <student-attend v-if="name==='上课签到'"></student-attend>
         <my-notice v-if="name==='我的通知'"></my-notice>
+        <apply-examine v-if="name==='申请审批'"></apply-examine>
       </el-main>
 
   </el-container>
@@ -40,10 +40,12 @@ import AttendStatistics from "@/components/AttendStatistics";
 import AttendBoard from "@/components/AttendBoard";
 import StudentAttend from "@/components/StudentAttend";
 import MyNotice from "@/components/MyNotice";
+import ApplyExamine from "@/components/ApplyExamine";
 
 export default {
   name: "Home",
   components: {
+    ApplyExamine,
     MyNotice,
     StudentAttend,
     AttendBoard, AttendStatistics, AskForLeave, HealthRecord, Attend, DataTable,Index,HealthDeclaration},
