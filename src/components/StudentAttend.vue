@@ -28,7 +28,7 @@ export default {
   },
   methods:{
     get_tag(){
-      let path='http://127.0.0.1:5001/attend/get'
+      let path='http://43.143.116.236:5001/attend/get'
       let parmas={
         username:getUser()
       }
@@ -38,7 +38,7 @@ export default {
       })
     },
     attend(){
-      let path='http://127.0.0.1:5001/attend/check'
+      let path='http://43.143.116.236:5001/attend/check'
       let parmas={
         code:this.code,
         username:getUser()

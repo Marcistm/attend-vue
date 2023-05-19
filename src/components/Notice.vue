@@ -51,7 +51,7 @@ export default {
     }
   },methods:{
     get_course(){
-      let path='http://127.0.0.1:5001/course/get'
+      let path='http://43.143.116.236:5001/course/get'
       let parmas={
         teacher:getUser()
       }
@@ -61,7 +61,7 @@ export default {
       })
     },
     submit(){
-      let path='http://127.0.0.1:5001/notice/submit'
+      let path='http://43.143.116.236:5001/notice/submit'
       const formData = new FormData();
       for (const key in this.form) {
         formData.append(key, this.form[key]);

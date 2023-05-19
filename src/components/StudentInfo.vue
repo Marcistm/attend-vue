@@ -111,7 +111,7 @@ export default {
   },
   methods:{
     getClass(){
-      let path='http://127.0.0.1:5001/class/get'
+      let path='http://43.143.116.236:5001/class/get'
       axios.get(path).then(res=>{
         this.class_options=res.data.data
       })
@@ -163,7 +163,7 @@ export default {
 
     },
     save(){
-      let path='http://127.0.0.1:5001/student_info/submit'
+      let path='http://43.143.116.236:5001/student_info/submit'
       let params={}
       params['username']=localStorage.getItem('username')
       params['name']=this.table[0].item2

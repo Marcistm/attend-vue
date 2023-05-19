@@ -38,13 +38,13 @@ export default {
       this.getClass()
     },
     getClass(){
-      let path='http://127.0.0.1:5001/class/get'
+      let path='http://43.143.116.236:5001/class/get'
       axios.get(path).then(res=>{
         this.class=res.data.data
       })
     },
     submit(){
-      let path='http://127.0.0.1:5001/attend/submit'
+      let path='http://43.143.116.236:5001/attend/submit'
       axios.post(path,this.form).then(res=>{
         if (res.data.code===200){
           this.$store.state.dialog=false

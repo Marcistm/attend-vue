@@ -37,13 +37,13 @@ export default {
   },
   methods:{
     getTeacher(){
-      let path='http://127.0.0.1:5001/teacher/get'
+      let path='http://43.143.116.236:5001/teacher/get'
       axios.get(path).then(res=>{
         this.teacher=res.data.data
       })
     },
     submit(){
-      let path='http://127.0.0.1:5001/class/submit'
+      let path='http://43.143.116.236:5001/class/submit'
       axios.post(path,this.form).then(res=>{
         if (res.data.code===200){
           this.$store.state.dialog=false
@@ -53,7 +53,7 @@ export default {
       })
     },
     update(){
-      let path='http://127.0.0.1:5001/class/update'
+      let path='http://43.143.116.236:5001/class/update'
       this.form['id']=this.id
       axios.post(path,this.form).then(res=>{
         if (res.data.code===200){

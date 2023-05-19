@@ -158,7 +158,7 @@ export default {
       })
     },
     see(id,table){
-      let path = 'http://127.0.0.1:5001/see'
+      let path = 'http://43.143.116.236:5001/see'
       let params = {id: id,table:table}
       axios.get(path,{params:params}).then(res=>{
         if (res.data.data.length){

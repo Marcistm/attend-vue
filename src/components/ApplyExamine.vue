@@ -66,7 +66,7 @@ export default {
       })
     },
     approval(id,type,condition){
-      let path='http://127.0.0.1:5001/process/approval'
+      let path='http://43.143.116.236:5001/process/approval'
       let parmas={
         id:id,
         type:type,
@@ -78,7 +78,7 @@ export default {
 
     },
     get_process(){
-      let path='http://127.0.0.1:5001/process/get'
+      let path='http://43.143.116.236:5001/process/get'
       let parmas={
         name:getUserName()
       }

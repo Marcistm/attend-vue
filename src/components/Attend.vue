@@ -81,7 +81,7 @@ export default {
 
   methods:{
     end(){
-      let path1='http://127.0.0.1:5001/attend/end'
+      let path1='http://43.143.116.236:5001/attend/end'
       let parmas={
         class_name: this.class_name,
         id:this.id
@@ -98,7 +98,7 @@ export default {
       this.time=formatTime(time)
       const randomNum = Math.floor(Math.random() * 10000); // 生成随机的四位数字
       this.counter = randomNum.toString().padStart(4, "0"); // 补零操作，保证显示的数字总共有四位数
-      let path1='http://127.0.0.1:5001/attend/insert'
+      let path1='http://43.143.116.236:5001/attend/insert'
       axios.get(path1,{params:this.formInLine}).then(res=>{
         if (res.data.code===200){
           this.$message.success('考勤开始成功')
@@ -110,7 +110,7 @@ export default {
         this.counter = randomNum.toString().padStart(4, "0"); // 补零操作，保证显示的数字总共有四位数
         time=time-2000;
         this.time=formatTime(time)
-        let path=`http://127.0.0.1:5001/attend/start`
+        let path=`http://43.143.116.236:5001/attend/start`
         let parmas={
           code:this.counter,
           id:this.id

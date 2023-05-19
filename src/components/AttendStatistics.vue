@@ -105,7 +105,7 @@ export default {
       console.log(this.usernames)
     },
     getResult(){
-      let path='http://127.0.0.1:5001/attend/statistics'
+      let path='http://43.143.116.236:5001/attend/statistics'
       let params={
         course:this.course
       }
@@ -119,7 +119,7 @@ export default {
       })
     },
     getCourse(){
-      let path='http://127.0.0.1:5001/course/get'
+      let path='http://43.143.116.236:5001/course/get'
       let params={
         teacher:getUser()
       }
