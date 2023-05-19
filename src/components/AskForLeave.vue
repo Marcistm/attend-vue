@@ -35,16 +35,7 @@
 <script>
 import axios from "axios";
 import {MessageBox} from "element-ui";
-function formatTime(timestamp) {
-  const date = new Date(timestamp);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  const seconds = String(date.getSeconds()).padStart(2, "0");
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
+
 
 import FileUpload from "@/components/FileUpload";
 export default {
@@ -94,8 +85,8 @@ export default {
       const formData = new FormData();
       formData.append('id',this.id)
       formData.append('reason',this.table.reason)
-      formData.append('start_time',formatTime(this.table.date[0]))
-      formData.append('end_time',formatTime(this.table.date[1]))
+      formData.append('start_time',this.$store.state.formatTime(this.table.date[0]))
+      formData.append('end_time',this.$store.state.formatTime(this.table.date[1]))
       let old_file=[]
       this.$refs.files.fileList.forEach(item=>{
         if (item.status==='success'){
@@ -130,8 +121,8 @@ export default {
         this.table.username=localStorage.getItem('username')
         this.table.name=localStorage.getItem('name')
         this.table.reason=res.data.data[0].reason
-        this.table.date[0]=formatTime(res.data.data[0].start_time)
-        this.table.date[1]=formatTime(res.data.data[0].end_time)
+        this.table.date[0]=this.$store.state.formatTime(res.data.data[0].start_time)
+        this.table.date[1]=this.$store.state.formatTime(res.data.data[0].end_time)
         res.data.data.forEach(item=>{
           let fileObj = {
             uid: Math.random(),
@@ -195,8 +186,8 @@ export default {
           formData.append('username',this.table.username)
           formData.append('name',this.table.name)
           formData.append('reason',this.table.reason)
-          formData.append('start_time',formatTime(this.table.date[0]))
-          formData.append('end_time',formatTime(this.table.date[1]))
+          formData.append('start_time',this.$store.state.formatTime(this.table.date[0]))
+          formData.append('end_time',this.$store.state.formatTime(this.table.date[1]))
           axios.post('http://43.143.116.236:5001/ask_for_leave/add', formData)
               .then((res) => {
                 if (res.data.code===200){
@@ -225,9 +216,9 @@ export default {
     '$store.state.data': function(newVal) {
       this.data = newVal;
       this.data.forEach(item => {
-        item['start_time'] = formatTime(item['start_time']);
-        item['time'] = formatTime(item['time']);
-        item['end_time'] = formatTime(item['end_time']);
+        item['start_time'] = this.$store.state.formatTime(item['start_time']);
+        item['time'] = this.$store.state.formatTime(item['time']);
+        item['end_time'] = this.$store.state.formatTime(item['end_time']);
       });
     },
     see_data: {
