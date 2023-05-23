@@ -25,7 +25,7 @@ export default {
   name: "Board",
   components: {FileUpload},
   props:{
-    id:Number,
+    id:String,
     see_data:Array
   },
   watch: {

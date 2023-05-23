@@ -11,8 +11,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :visible.sync="tag" @before-close="handleBeforeClose">
-      <notice  :see_data="see_data" :id="id" ></notice>
+    <el-dialog :visible.sync="tag" >
+      <notice v-if="tag" :see_data="see_data" :id="id" ></notice>
     </el-dialog>
   </div>
 
@@ -37,18 +37,13 @@ export default {
     }
   },
   methods:{
-    handleBeforeClose(done) {
-      this.$refs.childComponent.$destroy(); // 销毁子组件
-      done();
-    },
     see(id,table){
       let path = 'http://43.143.116.236:5001/see'
       let params = {id: id,table:table}
       axios.get(path,{params:params}).then(res=>{
         if (res.data.data.length){
           this.see_data=res.data.data
-          console.log(res.data.data)
-          this.id=id
+          this.id=id.toString()
           this.tag = true
         }
       })

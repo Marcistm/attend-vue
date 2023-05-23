@@ -17,16 +17,17 @@
     </template>
   </el-table-column>
 </el-table>
-    <el-dialog :title="name" :visible.sync="$store.state.dialog">
+    <el-dialog :title="name" :visible.sync="$store.state.dialog" @close="see_data=[]">
       <board v-if="name==='公告管理'" :see_data="see_data" :id="id" @search="getData"></board>
       <AskForLeave v-if="name==='请假'" :see_data="see_data" :id="id" @search="getData"></AskForLeave>
       <notice v-if="['通知管理','我的通知'].includes(name)" :see_data="see_data" :id="id" @search="getData"></notice>
-      <leave-school v-if="name==='离校申请'" :see_data="see_data"  @search="getData"></leave-school>
-      <return-school v-if="name==='返校申请'" :see_data="see_data"  @search="getData"></return-school>
+      <leave-school v-if="name==='离校申请'" :see_data="see_data" :id="id" @search="getData"></leave-school>
+      <return-school v-if="name==='返校申请'" :see_data="see_data" :id="id"  @search="getData"></return-school>
       <user-manage v-if="name==='用户管理'" @search="getData"></user-manage>
       <class-manage v-if="name==='班级管理'" @search="getData" :see_data="see_data" :id="id"></class-manage>
       <attend-board v-if="name==='考勤管理'" @search="getData"></attend-board>
     </el-dialog>
+
     <el-dialog :visible.sync="attend_tag">
       <attend :class_name="this.class" :course="course"></attend>
     </el-dialog>
@@ -75,6 +76,7 @@ export default {
   watch: {
     name: function(newValue, oldValue) {
       this.getData();
+      this.see_data=[]
     }
   },
   mounted() {
@@ -96,6 +98,7 @@ export default {
       let path='http://43.143.116.236:5001/get/data'
       axios.get(path, { params: { sql: sql } }).then(res => {
         this.data=res.data.data
+        console.log(sql)
         console.log(this.data)
         if (containsField(this.data,'condition')){
           this.data.forEach(item=>{
@@ -161,10 +164,11 @@ export default {
       let path = 'http://43.143.116.236:5001/see'
       let params = {id: id,table:table}
       axios.get(path,{params:params}).then(res=>{
+        console.log(res.data)
         if (res.data.data.length){
           this.see_data=res.data.data
           console.log(this.see_data)
-          this.id=id
+          this.id=id.toString()
           this.$store.state.dialog = true
         }
       })

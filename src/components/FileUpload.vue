@@ -18,7 +18,7 @@ import axios from "axios";
 export default {
   name: "FileUpload",
   props:{
-    original_id:Number,
+    original_id:String,
     type:String,
     disabled:Boolean
   },
@@ -50,7 +50,7 @@ export default {
     },
     get_old_file(){
       let params={
-        original_id:this.original_id.toString(),
+        original_id:this.original_id,
         type:this.type
       }
       let path='http://43.143.116.236:5001/old_file/get'

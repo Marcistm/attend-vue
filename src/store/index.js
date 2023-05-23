@@ -13,7 +13,7 @@ const store = new Vuex.Store({
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getUTCDate()).padStart(2, "0");
-    const hours = String(date.getUTCHours()).padStart(2, "0");
+    const hours = String(date.getUTCHours()+8).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
     const seconds = String(date.getSeconds()).padStart(2, "0");
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
@@ -34,7 +34,7 @@ const store = new Vuex.Store({
         tableData:[
             {name:'考勤管理',table: 'course',column:[{label:'id',name:'id',show:false},{label:'课程',name:'course',show:true},{label:'班级',name:'class',show:true}] },
             {name:'离校申请',table:'process',column:[{label:'发起时间',name:'time',show:true},{label:'当前状态',name:'condition',show:true},{label:'类型',name:'type',show:false},{label:'id',name:'id',show:false}]},
-            {name:'返校申请',table:'process',column:[{label:'发起时间',name:'time',show:true},{label:'当前状态',name:'condition',show:true},{label:'id',name:'id',show:false}]},
+            {name:'返校申请',table:'process',column:[{label:'发起时间',name:'time',show:true},{label:'当前状态',name:'condition',show:true},{label:'id',name:'id',show:false},{label:'类型',name:'type',show:false}]},
             {name:'请假',table:'ask_for_leave',column:[{label:'发起时间',name:'time',show:true},{label:'当前状态',name:'condition',show:true},{label:'id',name:'id',show:false},{label:'理由',name:'reason',show:true},{label:'开始时间',name:'start_time'},{label:'结束时间',name:'end_time'}]},
             {name:'用户管理',table:'user_table',column:[{label:'id',name:'id',show:false},{label:'用户名',name:'username',show:true},{label:'姓名',name:'name',show:true},{label:'身份',name:'privilege',show:true}]},
             {name:'通知管理',table:'notice',column:[{label:'id',name:'id',show:false},{label:'时间',name:'time',show:true},{label:'内容',name:'text',show:true},{label:'课程',name:'course',show:true},{label:'发布人',name:'author',show:true}]},
